@@ -12,6 +12,7 @@ namespace QuanLyTienGioBBD.Data
         public int ID { get; set; }
         public int LoaiBanID { get; set; }
         public string TenBan { get; set; }
+        public string TrangThai { get; set; }
         public bool DangSuDung { get; set; }
 
         public virtual LoaiBan LoaiBan { get; set; } = null!;

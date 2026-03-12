@@ -37,15 +37,15 @@
             txtSoLuong = new TextBox();
             groupBox1 = new GroupBox();
             dgvDichVu = new DataGridView();
+            TenDichVu = new DataGridViewTextBoxColumn();
+            DonGia = new DataGridViewTextBoxColumn();
+            SoLuong = new DataGridViewTextBoxColumn();
             btnThem = new Button();
             btnSua = new Button();
             btnXoa = new Button();
             btnLuu = new Button();
             btnHuyBo = new Button();
             btnThoat = new Button();
-            TenDichVu = new DataGridViewTextBoxColumn();
-            DonGia = new DataGridViewTextBoxColumn();
-            SoLuong = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDichVu).BeginInit();
             SuspendLayout();
@@ -128,6 +128,27 @@
             dgvDichVu.Size = new Size(745, 188);
             dgvDichVu.TabIndex = 0;
             // 
+            // TenDichVu
+            // 
+            TenDichVu.DataPropertyName = "TenDichVu";
+            TenDichVu.HeaderText = "Tên Dịch Vụ";
+            TenDichVu.MinimumWidth = 6;
+            TenDichVu.Name = "TenDichVu";
+            // 
+            // DonGia
+            // 
+            DonGia.DataPropertyName = "DonGia";
+            DonGia.HeaderText = "Đơn Giá";
+            DonGia.MinimumWidth = 6;
+            DonGia.Name = "DonGia";
+            // 
+            // SoLuong
+            // 
+            SoLuong.DataPropertyName = "SoLuong";
+            SoLuong.HeaderText = "Số Lượng";
+            SoLuong.MinimumWidth = 6;
+            SoLuong.Name = "SoLuong";
+            // 
             // btnThem
             // 
             btnThem.Location = new Point(363, 53);
@@ -160,7 +181,7 @@
             // 
             // btnLuu
             // 
-            btnLuu.Location = new Point(520, 43);
+            btnLuu.Location = new Point(520, 53);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(94, 29);
             btnLuu.TabIndex = 11;
@@ -188,32 +209,11 @@
             btnThoat.UseVisualStyleBackColor = true;
             btnThoat.Click += btnThoat_Click;
             // 
-            // TenDichVu
-            // 
-            TenDichVu.DataPropertyName = "TenDichVu";
-            TenDichVu.HeaderText = "Tên Dịch Vụ";
-            TenDichVu.MinimumWidth = 6;
-            TenDichVu.Name = "TenDichVu";
-            // 
-            // DonGia
-            // 
-            DonGia.DataPropertyName = "DonGia";
-            DonGia.HeaderText = "Đơn Giá";
-            DonGia.MinimumWidth = 6;
-            DonGia.Name = "DonGia";
-            // 
-            // SoLuong
-            // 
-            SoLuong.DataPropertyName = "SoLuong";
-            SoLuong.HeaderText = "Số Lượng";
-            SoLuong.MinimumWidth = 6;
-            SoLuong.Name = "SoLuong";
-            // 
             // FrmDichVu
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(782, 450);
+            ClientSize = new Size(782, 479);
             Controls.Add(btnThoat);
             Controls.Add(btnHuyBo);
             Controls.Add(btnLuu);

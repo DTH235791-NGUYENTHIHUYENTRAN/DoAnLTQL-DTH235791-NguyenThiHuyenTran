@@ -11,6 +11,7 @@ namespace QuanLyTienGioBBD.Data
     {
         public int ID { get; set; }
         public string TenLoaiBan { get; set; }
+        public string TrangThai { get; set; }
         public int GiaTienGio { get; set; }
 
         public virtual ObservableCollectionListSource<BanBiDa> BanBida { get; } = new();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,5 +16,7 @@ namespace QuanLyTienGioBBD.Data
         public string TenDichVu { get; set; }
         public int DonGia { get; set; }
         public int SoLuong { get; set; }
+
+      
     }
 }
