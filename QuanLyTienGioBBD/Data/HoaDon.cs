@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuanLyTienGioBBD.Data
 {
@@ -14,17 +11,19 @@ namespace QuanLyTienGioBBD.Data
 
         public int BanBidaID { get; set; }
 
-        public int? NhanVienID { get; set; }   // cho phép null
-        public int? KhachHangID { get; set; }  // cho phép null
+        public int? NhanVienID { get; set; }
 
-        public DateTime? GioBatDau { get; set; }
+        public int? KhachHangID { get; set; }
 
-        public DateTime? GioKetThuc { get; set; } // cho phép null
+        public DateTime GioBatDau { get; set; } = DateTime.Now;
 
-        public decimal? TongTien { get; set; } // cho phép null
+        public DateTime? GioKetThuc { get; set; }
 
-        public virtual BanBiDa BanBida { get; set; } = null!;
-        public virtual NhanVien? NhanVien { get; set; }
-        public virtual KhachHang? KhachHang { get; set; }
+        public decimal? TongTien { get; set; }
+
+        // NAVIGATION
+        public virtual Ban BanBida { get; set; }
+        public virtual NhanVien NhanVien { get; set; }
+        public virtual KhachHang KhachHang { get; set; }
     }
 }

@@ -13,13 +13,13 @@ namespace QuanLyTienGioBBD.Data
         public QLBidaDbContext()
         {
         }
-        public DbSet<LoaiBan> LoaiBan { get; set; }
-        public DbSet<BanBiDa> BanBida { get; set; }
+        
+        public DbSet<Ban> Ban { get; set; }
         public DbSet<NhanVien> NhanVien { get; set; }
         public DbSet<KhachHang> KhachHang { get; set; }
         public DbSet<HoaDon> HoaDon { get; set; }
-        public DbSet<HoaDonChiTiet> HoaDonChiTiet { get; set; }
-        public DbSet<DichVu> DichVu { get; set; }
+        public DbSet<Users> Users { get; set; }
+        public DbSet<LoaiKhach> LoaiKhach { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

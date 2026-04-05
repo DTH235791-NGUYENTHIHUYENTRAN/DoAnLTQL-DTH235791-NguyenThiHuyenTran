@@ -1,19 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace QuanLyTienGioBBD.Data
 {
-    public class LoaiBan
+    public class Ban
     {
-        public int ID { get; set; }
-        public string TenLoaiBan { get; set; }
+        [Key]
+        public int MaBan { get; set; }
+        public string TenBan { get; set; }
         public string TrangThai { get; set; }
-        public int GiaTienGio { get; set; }
+        public string LoaiBan { get; set; }
+        public DateTime? GioBatDau { get; set; }
 
-        public virtual ObservableCollectionListSource<BanBiDa> BanBida { get; } = new();
     }
 }
