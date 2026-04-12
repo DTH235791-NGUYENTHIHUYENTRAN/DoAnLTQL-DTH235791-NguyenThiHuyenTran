@@ -21,6 +21,7 @@ namespace QuanLyTienGioBBD
             // Application.Run(new FrmHoaDon_ChiTiet());
             // Application.Run(new FrmQuanLyBan());
             //   Application.Run(new FormTrangChu());
+             Application.Run(new FrmThongKeDoanhThu());
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
