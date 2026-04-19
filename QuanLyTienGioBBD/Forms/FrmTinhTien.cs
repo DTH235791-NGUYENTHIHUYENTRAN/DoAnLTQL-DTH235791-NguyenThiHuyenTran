@@ -5,11 +5,20 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using System.Security.Cryptography;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Spreadsheet;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Color = System.Drawing.Color;
+using DataTable = System.Data.DataTable;
+using System.Runtime.InteropServices;
 
 
 
@@ -21,13 +30,11 @@ namespace QuanLyTienGioBBD.Forms
         HoaDon hoaDon;
         KhachHang khDangChon = null;
         decimal tongTienTinh = 0;
-        PrintDocument pd = new PrintDocument();
 
         public FrmTinhTien(HoaDon hd)
         {
             InitializeComponent();
-            hoaDon = hd;
-            pd.PrintPage += Pd_PrintPage;
+            this.hoaDon = hd;
 
         }
 
@@ -46,127 +53,276 @@ namespace QuanLyTienGioBBD.Forms
             khDangChon = null;
             lblTenKH.Text = "Khách lẻ";
             lblLoaiKH.Text = "Loại KH: Thường";
+            lblLoaiKH.ForeColor = Color.Black;
             lblDiem.Text = "Điểm: 0";
-            lblUudai.Text = "Ưu đãi: Không";
+            lblUuDai.Text = "Ưu đãi: Không";
         }
-
-
         void HienThiThongTin()
         {
-            
-            
-                var ban = db.Ban.FirstOrDefault(x => x.MaBan == hoaDon.BanBidaID);
-                if (ban == null) return;
+            // Tìm thông tin bàn hiện tại từ hóa đơn
 
-                DateTime batDau = hoaDon.GioBatDau;
-                DateTime ketThuc = DateTime.Now;
-                TimeSpan tg = ketThuc - batDau;
+            var ban = db.Ban.FirstOrDefault(x => x.MaBan == hoaDon.BanBidaID);
 
-                // 1. Tính số phút (Làm tròn lên để không thiệt tiền giờ của quán)
-                decimal soPhut = (decimal)Math.Ceiling(tg.TotalMinutes);
-                if (soPhut < 0) soPhut = 0;
+            if (ban == null) return;
 
-                // 2. Xác định giá bàn (VIP 100k, Thường 80k)
-                decimal gia = (ban.LoaiBan == "VIP") ? 100000m : 80000m;
-                decimal tienGoc = (soPhut / 60m) * gia;
 
-                // 3. Xử lý giảm giá thành viên
-                decimal phanTramGiam = 0m;
-                if (khDangChon != null)
+
+            // 1. Hiển thị thông tin Bàn và Khách hàng cơ bản
+
+            lblBan.Text = "Bàn: " + ban.TenBan; // Hiển thị tên bàn (Bàn 1, Bàn 2...)
+
+
+
+            // 2. Lấy tiền tích lũy từ các chặng chơi trước (đã lưu khi bấm chuyển bàn)
+
+            decimal tienTichLuy = hoaDon.TienDaTichLuy ?? 0m;
+
+
+
+            // 3. Tính toán cho chặng HIỆN TẠI
+
+            DateTime batDauHienTai = hoaDon.GioBatDau;
+
+            DateTime ketThuc = DateTime.Now;
+
+            TimeSpan tgHienTai = ketThuc - batDauHienTai;
+
+            // Cách này sẽ giúp 11:00 đến 11:03 hiện đúng 3 phút thay vì 4 phút
+
+            int phutHienTai = (int)tgHienTai.TotalMinutes;
+
+            if (phutHienTai < 0) phutHienTai = 0;
+
+
+
+            // Xác định đơn giá dựa trên loại bàn
+
+            decimal giaHienTai = (ban.LoaiBan.ToUpper() == "VIP") ? 100000m : 80000m;
+
+            decimal tienBanHienTai = (phutHienTai / 60m) * giaHienTai;
+
+
+
+            // 4. Hiển thị Thông tin Thời gian và Giá bàn hiện tại
+
+            lblBatDau.Text = "Bắt đầu (Bàn này): " + batDauHienTai.ToString("HH:mm");
+
+            lblKetThuc.Text = "Kết thúc: " + ketThuc.ToString("HH:mm");
+
+            lblGiaBan.Text = "Giá: " + giaHienTai.ToString("N0") + " VND/giờ";
+
+
+
+            // Hiển thị Tổng thời gian của chặng hiện tại
+
+            lblThoiGian.Text = "Tổng thời gian chơi: " + phutHienTai + " phút";
+
+
+
+            // 5. Hiển thị Chi tiết tiền trong GroupBox
+
+            lblTienBanHienTai.Text = "Tiền bàn hiện tại: " + tienBanHienTai.ToString("N0") + " VND";
+
+            lblTienBanCu.Text = "Tiền các bàn cũ: " + tienTichLuy.ToString("N0") + " VND";
+
+            // 6. Hiển thị Lịch sử chặng chơi (Ghi chú bàn cũ)
+
+            // Sẽ hiển thị danh sách dạng: Bàn 6 (10:06-10:40) [80,000đ/h] = 45,333 VND
+
+            if (!string.IsNullOrEmpty(hoaDon.GhiChu))
+
+            {
+              // Thay thế dấu chấm phẩy bằng xuống dòng để hiện danh sách từng bàn
+
+                lblGhiChuBanCu.Text = "Lịch sử chặng chơi:\n" + hoaDon.GhiChu.Replace("; ", Environment.NewLine);
+
+            }
+
+            else
+
+            {
+
+                lblGhiChuBanCu.Text = "Lịch sử chặng chơi: (Không có)";
+
+            }
+
+            // 7. Tính Tổng tiền và áp dụng Ưu đãi (VIP)
+
+            decimal tienGocTong = tienTichLuy + tienBanHienTai;
+
+            decimal phanTramGiam = 0m;
+
+            if (khDangChon != null)
+
+            {
+
+                var loai = db.LoaiKhach.Find(khDangChon.LoaiKhachID);
+
+                if (loai != null && loai.TenLoai.ToUpper() == "VIP")
+
                 {
-                    // Kiểm tra loại khách để áp dụng ưu đãi
-                    var loai = db.LoaiKhach.Find(khDangChon.LoaiKhachID);
-                    if (loai != null && loai.TenLoai == "VIP")
-                    {
-                        phanTramGiam = 0.1m; // Giảm 10% cho khách VIP
-                    }
+
+                    phanTramGiam = 0.1m; // Giảm 10% cho khách VIP
+
                 }
 
-                // 4. Tính toán số tiền cuối cùng và LÀM TRÒN (Quan trọng để tránh số lẻ)
-                decimal tienGiam = tienGoc * phanTramGiam;
-                decimal tienChuaLamTron = tienGoc - tienGiam;
-
-                // Làm tròn đến hàng nghìn (Ví dụ: 85.333 -> 85.000) giúp thanh toán tiền mặt dễ dàng
-                tongTienTinh = Math.Round(tienChuaLamTron / 1000m) * 1000m;
-
-                // 5. Hiển thị lên giao diện (Sử dụng định dạng "N0" để có dấu phẩy ngăn cách)
-                lblBan.Text = "Bàn: " + ban.TenBan;
-                lblBatDau.Text = "Bắt đầu: " + batDau.ToString("HH:mm");
-                lblKetThuc.Text = "Kết thúc: " + ketThuc.ToString("HH:mm");
-                lblThoiGian.Text = "Thời gian: " + (int)soPhut + " phút";
-                lblGia.Text = "Giá: " + gia.ToString("N0") + " VND/giờ";
-
-                lblTienGoc.Text = "Tiền gốc: " + tienGoc.ToString("N0") + " VND";
-
-                // Hiển thị số tiền giảm giá rõ ràng
-                if (phanTramGiam > 0)
-                    lblGiamGia.Text = $"Giảm ({(phanTramGiam * 100):0}%): -" + tienGiam.ToString("N0") + " VND";
-                else
-                    lblGiamGia.Text = "Giảm: 0 VND";
-
-                // Hiển thị tổng tiền cuối cùng đã được làm tròn
-                lblTongTien.Text = "Tổng tiền: " + tongTienTinh.ToString("N0") + " VND";
-
-                // Cập nhật lại tiền thừa ngay lập tức nếu nhân viên đã nhập txtTienKhach
-                CapNhatTienThua();
-            
             }
+
+
+
+            decimal tienGiam = tienGocTong * phanTramGiam;
+
+            // Làm tròn tiền thanh toán cuối cùng đến hàng nghìn
+
+            tongTienTinh = Math.Round((tienGocTong - tienGiam) / 1000m) * 1000m;
+
+
+
+            // 8. Hiển thị Tổng kết thanh toán
+
+            lblUuDai.Text = "Ưu đãi: " + (phanTramGiam * 100).ToString("0") + "%";
+
+            lblTienGoc.Text = "Tiền gốc tổng: " + tienGocTong.ToString("N0") + " VND";
+
+            lblGiamGia.Text = "Giảm giá: -" + tienGiam.ToString("N0") + " VND";
+
+
+
+            // Đổi màu đỏ nếu có giảm giá để làm nổi bật
+
+            lblGiamGia.ForeColor = phanTramGiam > 0 ? System.Drawing.Color.Red : System.Drawing.Color.Black;
+
+            lblTongTien.Text = "Tổng tiền thanh toán: " + tongTienTinh.ToString("N0") + " VND";
+
+
+
+            // 9. Cập nhật phương thức thanh toán và tiền thừa
+
+            if (cboThanhToan.Text == "Chuyển khoản")
+
+            {
+
+                CapNhatQRThanhToan(tongTienTinh, ban.TenBan);
+
+            }
+
+            CapNhatTienThua();
+
+
+        }
 
         // Tách hàm tính tiền thừa ra để dùng chung
         void CapNhatTienThua()
         {
+            // Nếu là Chuyển khoản, mở nút luôn, không quan tâm ô nhập tiền
+            if (cboThanhToan.Text == "Chuyển khoản")
+            {
+                btnThanhToan.Enabled = true;
+                lblTienThua.Text = "Thừa: 0 VND";
+                return;
+            }
+
+            // Nếu là Tiền mặt, bắt buộc phải nhập tiền và tiền phải đủ
             if (decimal.TryParse(txtTienKhach.Text, out decimal tienKhach))
             {
                 decimal tienThua = tienKhach - tongTienTinh;
                 if (tienThua < 0)
+                {
                     lblTienThua.Text = "Thiếu: " + Math.Abs(tienThua).ToString("N0") + " VND";
+                    btnThanhToan.Enabled = false;
+                }
                 else
+                {
                     lblTienThua.Text = "Thừa: " + tienThua.ToString("N0") + " VND";
+                    btnThanhToan.Enabled = true;
+                }
+            }
+            else
+            {
+                btnThanhToan.Enabled = false;
             }
         }
 
-       
-       
-
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Xác nhận thanh toán?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.No) return;
+
+            if (MessageBox.Show("Xác nhận thanh toán và in hóa đơn?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) return;
 
             try
             {
                 var hd = db.HoaDon.Find(hoaDon.MaHD);
-                if (hd == null) return;
+                var ban = db.Ban.Find(hoaDon.BanBidaID);
+                if (hd == null || ban == null) return;
 
-                // Cập nhật giờ ra và tổng tiền vào DB
                 hd.GioKetThuc = DateTime.Now;
-                hd.TongTien = tongTienTinh;
+                ban.TrangThai = "Trống";
 
-                // Gán KhachHangID cho hóa đơn nếu có chọn khách
+                decimal giaHienTai = (ban.LoaiBan != null && ban.LoaiBan.ToUpper() == "VIP") ? 100000m : 80000m;
+                decimal tienTichLuy = hd.TienDaTichLuy ?? 0m;
+                int phutHienTai = (int)(hd.GioKetThuc.Value - hd.GioBatDau).TotalMinutes;
+                decimal tienBanHienTaiHT = (phutHienTai / 60m) * giaHienTai;
+                decimal tienGocTong = tienTichLuy + tienBanHienTaiHT;
+
+                decimal phanTramGiam = 0m;
+                string tenHienThi = "Khách lẻ";
+
                 if (khDangChon != null)
                 {
-                    hd.KhachHangID = khDangChon.ID; // Đảm bảo hóa đơn lưu đúng khách nào đã chơi
-
-                    // Logic tích điểm
-                    int diemMoi = (int)(tongTienTinh / 10000m);
-                    khDangChon.Diem += diemMoi;
-
-                    var loaiVip = db.LoaiKhach.FirstOrDefault(x => x.TenLoai == "VIP");
-                    if (loaiVip != null && khDangChon.Diem >= 50 && khDangChon.LoaiKhachID != loaiVip.ID)
-                    {
-                        khDangChon.LoaiKhachID = loaiVip.ID;
-                        MessageBox.Show($"Khách {khDangChon.TenKH} đã lên hạng VIP!", "Thông báo");
-                    }
+                    tenHienThi = khDangChon.TenKH; // Cập nhật đúng tên từ DB
+                    var loai = db.LoaiKhach.Find(khDangChon.LoaiKhachID);
+                    if (loai != null && loai.TenLoai.ToUpper().Contains("VIP")) phanTramGiam = 0.1m;
+                    hd.KhachHangID = khDangChon.ID;
                 }
 
-                // Giải phóng bàn
-                var ban = db.Ban.Find(hoaDon.BanBidaID);
-                if (ban != null) ban.TrangThai = "Trống";
+                decimal tienGiamGia = tienGocTong * phanTramGiam;
+                decimal thanhTienLamTron = Math.Round((tienGocTong - tienGiamGia) / 1000m) * 1000m;
 
-                db.SaveChanges(); // Chỉ cần gọi 1 lần duy nhất ở đây để lưu tất cả
+                hd.TongTien = thanhTienLamTron;
+                db.SaveChanges();
 
-                // In hóa đơn
-                PrintPreviewDialog ppd = new PrintPreviewDialog { Document = pd, WindowState = FormWindowState.Maximized };
-                ppd.ShowDialog();
+                // KHỞI TẠO DATATABLE VỚI 15 CỘT (Khớp image_45cb6b.png)
+                DataTable dtIn = new DataTable();
+                dtIn.Columns.Add("MaHD", typeof(int));              // 1
+                dtIn.Columns.Add("TenBan", typeof(string));         // 2
+                dtIn.Columns.Add("GioBatDau", typeof(string));      // 3
+                dtIn.Columns.Add("GioKetThuc", typeof(string));     // 4
+                dtIn.Columns.Add("TongTien", typeof(decimal));      // 5
+                dtIn.Columns.Add("NgayLap", typeof(string));        // 6
+                dtIn.Columns.Add("GiamGia", typeof(decimal));       // 7
+                dtIn.Columns.Add("ThanhTien", typeof(decimal));     // 8
+                dtIn.Columns.Add("qr", typeof(byte[]));             // 9
+                dtIn.Columns.Add("TienDaTichLuy", typeof(decimal)); // 10
+                dtIn.Columns.Add("TienBanHienTai", typeof(decimal)); // 11
+                dtIn.Columns.Add("GioBatDauCu", typeof(string));    // 12
+                dtIn.Columns.Add("GhiChu", typeof(string));         // 13
+                dtIn.Columns.Add("GiaBan", typeof(decimal));        // 14
+                dtIn.Columns.Add("TenKH", typeof(string));          // 15
+
+                byte[] qrCode = (cboThanhToan.Text == "Chuyển khoản") ? ImageToByteArray(picQR.Image) : null;
+
+                // THÊM DỮ LIỆU (Thứ tự cực kỳ quan trọng)
+                dtIn.Rows.Add(
+                    hd.MaHD,
+                    ban.TenBan,
+                    hd.GioBatDau.ToString("HH:mm"),
+                    hd.GioKetThuc?.ToString("HH:mm"),
+                    Math.Round(tienGocTong),
+                    DateTime.Now.ToString("dd/MM/yyyy"),
+                    Math.Round(tienGiamGia),
+                    thanhTienLamTron,
+                    qrCode,
+                    Math.Round(tienTichLuy),
+                    Math.Round(tienBanHienTaiHT),
+                    (tienTichLuy > 0) ? hd.GioBatDau.ToString("HH:mm") : "",
+                    hd.GhiChu ?? "",
+                    giaHienTai,
+                    tenHienThi // Cột 15: Tên khách hàng
+                );
+
+                using (InHoaDon frm = new InHoaDon(dtIn))
+                {
+                    frm.ShowDialog();
+                }
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -174,88 +330,68 @@ namespace QuanLyTienGioBBD.Forms
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message);
+
+            }
+            }
+
+        private byte[] ImageToByteArray(Image imageIn)
+        {
+            if (imageIn == null) return null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                imageIn.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
             }
         }
-
-        private void Pd_PrintPage(object sender, PrintPageEventArgs e)
+        private void CapNhatQRThanhToan(decimal soTien, string tenBan)
         {
-            Graphics g = e.Graphics;
-            Font fTitle = new Font("Arial", 18, FontStyle.Bold);
-            Font fHeader = new Font("Arial", 11, FontStyle.Bold);
-            Font fBody = new Font("Arial", 10, FontStyle.Regular);
-            Font fTotal = new Font("Arial", 12, FontStyle.Bold);
-            Pen pen = new Pen(Color.Black, 1);
-
-            float y = 20;
-            int x = 10;
-            int w = 300; // Độ rộng hóa đơn nhiệt thường dùng
-
-            // Tiêu đề quán
-            g.DrawString("BIDA HTran", fTitle, Brushes.Black, x + 80, y); y += 35;
-            g.DrawString("ĐC: 123 đường abc, TP Long Xuyên", fBody, Brushes.Black, x + 30, y); y += 20;
-            g.DrawString("ĐT: 0909689999", fBody, Brushes.Black, x + 85, y); y += 30;
-
-            g.DrawString("HÓA ĐƠN THANH TOÁN", fHeader, Brushes.Black, x + 60, y); y += 25;
-            g.DrawLine(pen, x, y, x + w, y); y += 10;
-
-            // Thông tin bàn và khách
-            g.DrawString(lblBan.Text, fBody, Brushes.Black, x, y);
-            g.DrawString("Ngày: " + DateTime.Now.ToString("dd/MM/yyyy"), fBody, Brushes.Black, x + 150, y); y += 25;
-
-            g.DrawString("Khách hàng: " + lblTenKH.Text, fBody, Brushes.Black, x, y); y += 25;
-            g.DrawLine(pen, x, y, x + w, y); y += 10;
-
-            // Chi tiết giờ giấc
-            g.DrawString(lblBatDau.Text, fBody, Brushes.Black, x, y); y += 20;
-            g.DrawString(lblKetThuc.Text, fBody, Brushes.Black, x, y); y += 20;
-            g.DrawString(lblThoiGian.Text, fBody, Brushes.Black, x, y);
-            g.DrawString(lblGia.Text, fBody, Brushes.Black, x + 150, y); y += 25;
-
-            g.DrawLine(pen, x, y, x + w, y); y += 10;
-
-            // Tiền bạc
-            g.DrawString(lblTienGoc.Text, fBody, Brushes.Black, x, y); y += 25;
-            g.DrawString(lblGiamGia.Text, fBody, Brushes.Black, x, y); y += 25;
-
-            g.DrawString("THÀNH TIỀN:", fTotal, Brushes.Black, x, y);
-            g.DrawString(tongTienTinh.ToString("N0") + " VND", fTotal, Brushes.Black, x + 150, y); y += 35;
-
-            // Chân hóa đơn
-            g.DrawString("Cảm ơn Quý khách - Hẹn gặp lại!", new Font("Arial", 9, FontStyle.Italic), Brushes.Black, x + 40, y);
+            string url = $"https://img.vietqr.io/image/VietinBank-108878054275-compact2.png?amount={soTien:0}&addInfo=Thanh toan {tenBan}";
+            picQR.Load(url);
         }
-
-
 
         private void cboThanhToan_SelectedIndexChanged(object sender, EventArgs e)
         {
             picQR.Visible = cboThanhToan.Text == "Chuyển khoản";
+            CapNhatTienThua();
         }
 
         private void txtSDT_TextChanged(object sender, EventArgs e)
         {
-            string sdt = txtSDT.Text.Trim();
-            if (sdt.Length == 10 && sdt.All(char.IsDigit))
+            string sdtInput = txtSDT.Text.Trim();
+            if (sdtInput.Length >= 10)
             {
-                var kh = db.KhachHang.FirstOrDefault(x => x.DienThoai == sdt);
+                // Dùng Trim() cả trong database để đối soát chính xác
+                var kh = db.KhachHang.ToList().FirstOrDefault(x => x.DienThoai.Trim() == sdtInput);
                 if (kh != null)
                 {
                     khDangChon = kh;
-                    lblTenKH.Text = kh.TenKH;
+                    lblTenKH.Text = "Khách: " + kh.TenKH; // Hiển thị tên khách thường ở đây
                     lblDiem.Text = "Điểm: " + kh.Diem;
-                    var loaiKH = db.LoaiKhach.Find(kh.LoaiKhachID);
-                    lblLoaiKH.Text = "Loại KH: " + (loaiKH?.TenLoai ?? "Thường");
-                    lblUudai.Text = (loaiKH?.TenLoai == "VIP") ? "Ưu đãi: Giảm 10%" : "Ưu đãi: Không";
+
+                    var loai = db.LoaiKhach.Find(kh.LoaiKhachID);
+                    lblLoaiKH.Text = "Loại KH: " + (loai?.TenLoai ?? "Thường");
+
+                    // Chỉ đổi màu đỏ nếu là VIP cho dễ phân biệt
+                    lblLoaiKH.ForeColor = (loai?.TenLoai == "VIP") ? Color.Red : Color.Black;
                 }
                 else ResetKhachLe();
             }
             else ResetKhachLe();
+
             HienThiThongTin();
         }
-    
+
+
 
         private void txtTienKhach_TextChanged(object sender, EventArgs e)
         {
             CapNhatTienThua();
+        }
+
+        private void btnDong_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

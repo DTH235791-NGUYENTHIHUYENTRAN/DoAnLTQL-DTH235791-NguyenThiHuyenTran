@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RptHoaDon.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>9</VersionMinor>
@@ -21,6 +25,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="RptHoaDon.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="Corrected.Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1358.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
     <PackageReference Include="EPPlus" Version="8.5.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.12" />
@@ -28,10 +42,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.SqlServer.Types" Version="170.1000.7" />
+    <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.33" />
     <PackageReference Include="WinForms.DataVisualization" Version="1.10.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="DsHoaDon.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DsHoaDon.xsd</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -44,6 +65,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DsHoaDon.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DsHoaDon.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

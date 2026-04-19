@@ -32,8 +32,10 @@
             btnHuyBo = new Button();
             btnLuu = new Button();
             groupBox1 = new GroupBox();
-            lblThongBaoQuyen = new Label();
-            txtChucVu = new TextBox();
+            btnSua = new Button();
+            cboChucVu = new ComboBox();
+            lblMaNV = new Label();
+            txtMaNV = new TextBox();
             btnThem = new Button();
             txtMatKhau = new TextBox();
             txtTenDangNhap = new TextBox();
@@ -86,8 +88,10 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(lblThongBaoQuyen);
-            groupBox1.Controls.Add(txtChucVu);
+            groupBox1.Controls.Add(btnSua);
+            groupBox1.Controls.Add(cboChucVu);
+            groupBox1.Controls.Add(lblMaNV);
+            groupBox1.Controls.Add(txtMaNV);
             groupBox1.Controls.Add(btnXoa);
             groupBox1.Controls.Add(btnHuyBo);
             groupBox1.Controls.Add(btnLuu);
@@ -105,27 +109,45 @@
             groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(2);
-            groupBox1.Size = new Size(753, 142);
+            groupBox1.Size = new Size(919, 142);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin nhân viên:";
             // 
-            // lblThongBaoQuyen
+            // btnSua
             // 
-            lblThongBaoQuyen.AutoSize = true;
-            lblThongBaoQuyen.Location = new Point(19, 106);
-            lblThongBaoQuyen.Name = "lblThongBaoQuyen";
-            lblThongBaoQuyen.Size = new Size(119, 20);
-            lblThongBaoQuyen.TabIndex = 7;
-            lblThongBaoQuyen.Text = "Đang tải quyền...";
-            lblThongBaoQuyen.Visible = false;
+            btnSua.Location = new Point(596, 103);
+            btnSua.Name = "btnSua";
+            btnSua.Size = new Size(68, 29);
+            btnSua.TabIndex = 11;
+            btnSua.Text = "Sửa";
+            btnSua.UseVisualStyleBackColor = true;
+            btnSua.Click += btnSua_Click;
             // 
-            // txtChucVu
+            // cboChucVu
             // 
-            txtChucVu.Location = new Point(382, 106);
-            txtChucVu.Name = "txtChucVu";
-            txtChucVu.Size = new Size(143, 27);
-            txtChucVu.TabIndex = 6;
+            cboChucVu.FormattingEnabled = true;
+            cboChucVu.Location = new Point(381, 108);
+            cboChucVu.Name = "cboChucVu";
+            cboChucVu.Size = new Size(151, 28);
+            cboChucVu.TabIndex = 10;
+            // 
+            // lblMaNV
+            // 
+            lblMaNV.AutoSize = true;
+            lblMaNV.Location = new Point(18, 106);
+            lblMaNV.Name = "lblMaNV";
+            lblMaNV.Size = new Size(54, 20);
+            lblMaNV.TabIndex = 9;
+            lblMaNV.Text = "Mã NV";
+            // 
+            // txtMaNV
+            // 
+            txtMaNV.Location = new Point(100, 103);
+            txtMaNV.Name = "txtMaNV";
+            txtMaNV.ReadOnly = true;
+            txtMaNV.Size = new Size(152, 27);
+            txtMaNV.TabIndex = 8;
             // 
             // btnThem
             // 
@@ -162,6 +184,7 @@
             txtSoDienThoai.Name = "txtSoDienThoai";
             txtSoDienThoai.Size = new Size(154, 27);
             txtSoDienThoai.TabIndex = 1;
+            txtSoDienThoai.KeyPress += txtSoDienThoai_KeyPress;
             // 
             // label4
             // 
@@ -176,7 +199,7 @@
             // lblChucVu
             // 
             lblChucVu.AutoSize = true;
-            lblChucVu.Location = new Point(257, 113);
+            lblChucVu.Location = new Point(257, 110);
             lblChucVu.Margin = new Padding(2, 0, 2, 0);
             lblChucVu.Name = "lblChucVu";
             lblChucVu.Size = new Size(66, 20);
@@ -228,7 +251,7 @@
             groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(2);
-            groupBox2.Size = new Size(756, 533);
+            groupBox2.Size = new Size(924, 533);
             groupBox2.TabIndex = 5;
             groupBox2.TabStop = false;
             groupBox2.Text = "Danh sách nhân viên";
@@ -245,7 +268,7 @@
             dgvNhanVien.MultiSelect = false;
             dgvNhanVien.Name = "dgvNhanVien";
             dgvNhanVien.RowHeadersWidth = 62;
-            dgvNhanVien.Size = new Size(752, 509);
+            dgvNhanVien.Size = new Size(920, 509);
             dgvNhanVien.TabIndex = 0;
             dgvNhanVien.CellClick += dgvNhanVien_CellClick;
             // 
@@ -253,7 +276,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(785, 455);
+            ClientSize = new Size(965, 653);
             Controls.Add(groupBox1);
             Controls.Add(groupBox2);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -291,7 +314,9 @@
         private Label label1;
         private GroupBox groupBox2;
         private DataGridView dgvNhanVien;
-        private TextBox txtChucVu;
-        private Label lblThongBaoQuyen;
+        private Label lblMaNV;
+        private TextBox txtMaNV;
+        private ComboBox cboChucVu;
+        private Button btnSua;
     }
 }

@@ -20,6 +20,8 @@ namespace QuanLyTienGioBBD.Data
         public DateTime? GioKetThuc { get; set; }
 
         public decimal? TongTien { get; set; }
+        public decimal? TienDaTichLuy { get; set; }
+        public string? GhiChu { get; set; }
 
         // NAVIGATION
         public virtual Ban BanBida { get; set; }

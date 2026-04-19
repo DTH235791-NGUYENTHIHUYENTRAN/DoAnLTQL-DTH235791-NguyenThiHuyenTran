@@ -52,18 +52,19 @@ namespace QuanLyTienGioBBD.Forms
                 btn.BackColor = (ban.LoaiBan == "VIP") ? (dangChoi ? Color.DeepPink : Color.Pink) : (dangChoi ? Color.Red : Color.Green);
                 btn.ForeColor = Color.White;
 
-                btn.Click += (s, e) => {
+                btn.Click += (s, e) =>
+                {
                     banDangChon = ban;
                     txtTenBan.Text = ban.TenBan;
                     cboTrangThai.Text = dangChoi ? "Đang chơi" : "Trống";
                     cboLoaiBan.Text = ban.LoaiBan;
                 };
                 flowLayoutPanelThuong.Controls.Add(btn);
-            
-        }
+
+            }
         }
 
-      
+
 
         private bool XacNhanAdmin()
         {
@@ -129,7 +130,7 @@ namespace QuanLyTienGioBBD.Forms
             var ban = db.Ban.Find(banDangChon.MaBan);
             if (ban == null) return;
 
-            ban.TenBan = txtTenBan.Text.Trim();          
+            ban.TenBan = txtTenBan.Text.Trim();
             ban.LoaiBan = cboLoaiBan.Text;
 
             db.SaveChanges();
@@ -185,14 +186,86 @@ namespace QuanLyTienGioBBD.Forms
             FrmTinhTien f = new FrmTinhTien(hd);
             if (f.ShowDialog() == DialogResult.OK) LoadBan();
         }
-            
+
 
         private void btnHuyBo_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
         }
-    }
-}
+
+        private void btnChuyenBan_Click(object sender, EventArgs e)
+        {
+            // 1. Kiểm tra đã chọn bàn trên giao diện chưa
+            if (banDangChon == null)
+            {
+                MessageBox.Show("Vui lòng chọn bàn đang chơi cần chuyển!", "Thông báo");
+                return;
+            }
+
+            // 2. Tìm hóa đơn đang mở của bàn cũ
+            var hd = db.HoaDon.FirstOrDefault(x => x.BanBidaID == banDangChon.MaBan && x.GioKetThuc == null);
+            if (hd == null)
+            {
+                MessageBox.Show("Bàn này đang trống, không thể chuyển!", "Thông báo");
+                return;
+            }
+
+            // 3. Mở Form chọn bàn mới
+            using (FrmChonBanMoi f = new FrmChonBanMoi())
+            {
+                if (f.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        int idMoi = f.MaBanDuocChon;
+                        DateTime bayGio = DateTime.Now;
+
+                        // --- LOGIC TÍNH TIỀN CHẶNG VỪA KẾT THÚC ---
+                        double soPhutChặngCu = (bayGio - hd.GioBatDau).TotalMinutes;
+                        if (soPhutChặngCu < 0) soPhutChặngCu = 0;
+
+                        // Xác định đơn giá bàn cũ (VIP: 100k, Thường: 80k)
+                        decimal giaBanCu = (banDangChon.LoaiBan.ToUpper() == "VIP") ? 100000m : 80000m;
+                        decimal tienChặngCu = (decimal)(soPhutChặngCu / 60) * giaBanCu;
+
+                        // --- LƯU LỊCH SỬ CHI TIẾT VÀO GHI CHÚ ---
+                        // Định dạng: Tên bàn (Giờ vào-Giờ ra) [Giá/h] = Số tiền
+                        string lichSuMoi = $"{banDangChon.TenBan} ({hd.GioBatDau:HH:mm}-{bayGio:HH:mm}) [{giaBanCu:N0}đ/h] = {tienChặngCu:N0} VND";
+
+                        if (string.IsNullOrEmpty(hd.GhiChu))
+                            hd.GhiChu = lichSuMoi;
+                        else
+                            hd.GhiChu += "; " + lichSuMoi;
+
+                        // --- CẬP NHẬT HÓA ĐƠN SANG BÀN MỚI ---
+                        hd.TienDaTichLuy = (hd.TienDaTichLuy ?? 0) + tienChặngCu;
+                        hd.BanBidaID = idMoi;
+                        hd.GioBatDau = bayGio; // Giờ bắt đầu tại bàn mới tính từ lúc này
+
+                        // --- CẬP NHẬT TRẠNG THÁI BÀN ---
+                        var banCu = db.Ban.Find(banDangChon.MaBan);
+                        var banMoi = db.Ban.Find(idMoi);
+                        if (banCu != null) banCu.TrangThai = "Trống";
+                        if (banMoi != null) banMoi.TrangThai = "Đang chơi";
+
+                        db.SaveChanges(); // Lưu tất cả thay đổi vào Database
+
+                        MessageBox.Show($"Chuyển từ {banCu.TenBan} sang {banMoi.TenBan} thành công!", "Thông báo");
+                        LoadBan(); // Tải lại sơ đồ bàn trên giao diện
+                        banDangChon = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi chuyển bàn: " + ex.Message);
+                    }
+                }
+                }
+            }
+            }
+        }
+    
+                
+
 
 
 

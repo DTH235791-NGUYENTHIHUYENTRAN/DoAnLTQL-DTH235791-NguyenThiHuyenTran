@@ -32,7 +32,7 @@
             lblBatDau = new Label();
             lblKetThuc = new Label();
             lblThoiGian = new Label();
-            lblGia = new Label();
+            lblGiaBan = new Label();
             lblTongTien = new Label();
             btnThanhToan = new Button();
             cboThanhToan = new ComboBox();
@@ -47,19 +47,28 @@
             lblTienGoc = new Label();
             groupBox2 = new GroupBox();
             lblBan = new Label();
-            lblUudai = new Label();
+            lblUuDai = new Label();
             txtSDT = new TextBox();
             btnDong = new Button();
+            groupBox3 = new GroupBox();
+            lblTienBanHienTai = new Label();
+            lblGhiChuBanCu = new Label();
+            lblTienBanCu = new Label();
+            groupBox4 = new GroupBox();
+            groupBox5 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)picQR).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
+            groupBox5.SuspendLayout();
             SuspendLayout();
             // 
             // lblBatDau
             // 
             lblBatDau.AutoSize = true;
             lblBatDau.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblBatDau.Location = new Point(6, 23);
+            lblBatDau.Location = new Point(8, 39);
             lblBatDau.Name = "lblBatDau";
             lblBatDau.Size = new Size(109, 23);
             lblBatDau.TabIndex = 1;
@@ -69,7 +78,7 @@
             // 
             lblKetThuc.AutoSize = true;
             lblKetThuc.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblKetThuc.Location = new Point(6, 61);
+            lblKetThuc.Location = new Point(8, 93);
             lblKetThuc.Name = "lblKetThuc";
             lblKetThuc.Size = new Size(117, 23);
             lblKetThuc.TabIndex = 2;
@@ -79,27 +88,27 @@
             // 
             lblThoiGian.AutoSize = true;
             lblThoiGian.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblThoiGian.Location = new Point(6, 102);
+            lblThoiGian.Location = new Point(8, 143);
             lblThoiGian.Name = "lblThoiGian";
             lblThoiGian.Size = new Size(131, 23);
             lblThoiGian.TabIndex = 3;
             lblThoiGian.Text = "Tổng thời gian";
             // 
-            // lblGia
+            // lblGiaBan
             // 
-            lblGia.AutoSize = true;
-            lblGia.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblGia.Location = new Point(6, 142);
-            lblGia.Name = "lblGia";
-            lblGia.Size = new Size(79, 23);
-            lblGia.TabIndex = 4;
-            lblGia.Text = "Tiền giờ";
+            lblGiaBan.AutoSize = true;
+            lblGiaBan.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            lblGiaBan.Location = new Point(8, 188);
+            lblGiaBan.Name = "lblGiaBan";
+            lblGiaBan.Size = new Size(79, 23);
+            lblGiaBan.TabIndex = 4;
+            lblGiaBan.Text = "Tiền giờ";
             // 
             // lblTongTien
             // 
             lblTongTien.AutoSize = true;
             lblTongTien.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblTongTien.Location = new Point(6, 176);
+            lblTongTien.Location = new Point(13, 159);
             lblTongTien.Name = "lblTongTien";
             lblTongTien.Size = new Size(90, 23);
             lblTongTien.TabIndex = 5;
@@ -108,7 +117,7 @@
             // btnThanhToan
             // 
             btnThanhToan.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btnThanhToan.Location = new Point(18, 505);
+            btnThanhToan.Location = new Point(550, 704);
             btnThanhToan.Name = "btnThanhToan";
             btnThanhToan.Size = new Size(155, 37);
             btnThanhToan.TabIndex = 6;
@@ -120,7 +129,7 @@
             // 
             cboThanhToan.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             cboThanhToan.FormattingEnabled = true;
-            cboThanhToan.Location = new Point(12, 229);
+            cboThanhToan.Location = new Point(6, 172);
             cboThanhToan.Name = "cboThanhToan";
             cboThanhToan.Size = new Size(151, 31);
             cboThanhToan.TabIndex = 7;
@@ -129,9 +138,9 @@
             // picQR
             // 
             picQR.Image = (Image)resources.GetObject("picQR.Image");
-            picQR.Location = new Point(9, 272);
+            picQR.Location = new Point(235, 26);
             picQR.Name = "picQR";
-            picQR.Size = new Size(154, 139);
+            picQR.Size = new Size(176, 159);
             picQR.SizeMode = PictureBoxSizeMode.StretchImage;
             picQR.TabIndex = 8;
             picQR.TabStop = false;
@@ -141,7 +150,7 @@
             // 
             lblLoaiKH.AutoSize = true;
             lblLoaiKH.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold);
-            lblLoaiKH.Location = new Point(151, 82);
+            lblLoaiKH.Location = new Point(12, 130);
             lblLoaiKH.Name = "lblLoaiKH";
             lblLoaiKH.Size = new Size(78, 20);
             lblLoaiKH.TabIndex = 9;
@@ -150,10 +159,10 @@
             // lblDiem
             // 
             lblDiem.AutoSize = true;
-            lblDiem.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold);
-            lblDiem.Location = new Point(6, 119);
+            lblDiem.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lblDiem.Location = new Point(15, 188);
             lblDiem.Name = "lblDiem";
-            lblDiem.Size = new Size(50, 20);
+            lblDiem.Size = new Size(54, 23);
             lblDiem.TabIndex = 10;
             lblDiem.Text = "Điểm";
             // 
@@ -169,27 +178,22 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(txtTienKhach);
-            groupBox1.Controls.Add(lblTienThua);
-            groupBox1.Controls.Add(lblGiamGia);
-            groupBox1.Controls.Add(lblTienGoc);
             groupBox1.Controls.Add(lblBatDau);
             groupBox1.Controls.Add(lblKetThuc);
             groupBox1.Controls.Add(lblThoiGian);
-            groupBox1.Controls.Add(lblGia);
-            groupBox1.Controls.Add(lblTongTien);
-            groupBox1.Location = new Point(311, 22);
+            groupBox1.Controls.Add(lblGiaBan);
+            groupBox1.Location = new Point(434, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(250, 411);
+            groupBox1.Size = new Size(484, 236);
             groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thời Gian Chơi";
             // 
             // txtTienKhach
             // 
-            txtTienKhach.Location = new Point(12, 287);
+            txtTienKhach.Location = new Point(6, 53);
             txtTienKhach.Name = "txtTienKhach";
-            txtTienKhach.Size = new Size(125, 27);
+            txtTienKhach.Size = new Size(167, 27);
             txtTienKhach.TabIndex = 9;
             txtTienKhach.TextChanged += txtTienKhach_TextChanged;
             // 
@@ -197,7 +201,7 @@
             // 
             lblTienThua.AutoSize = true;
             lblTienThua.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblTienThua.Location = new Point(12, 336);
+            lblTienThua.Location = new Point(9, 109);
             lblTienThua.Name = "lblTienThua";
             lblTienThua.Size = new Size(98, 23);
             lblTienThua.TabIndex = 8;
@@ -207,7 +211,7 @@
             // 
             lblGiamGia.AutoSize = true;
             lblGiamGia.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblGiamGia.Location = new Point(8, 250);
+            lblGiamGia.Location = new Point(15, 91);
             lblGiamGia.Name = "lblGiamGia";
             lblGiamGia.Size = new Size(92, 23);
             lblGiamGia.TabIndex = 7;
@@ -217,7 +221,7 @@
             // 
             lblTienGoc.AutoSize = true;
             lblTienGoc.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblTienGoc.Location = new Point(8, 215);
+            lblTienGoc.Location = new Point(15, 32);
             lblTienGoc.Name = "lblTienGoc";
             lblTienGoc.Size = new Size(88, 23);
             lblTienGoc.TabIndex = 6;
@@ -226,14 +230,14 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(lblBan);
-            groupBox2.Controls.Add(lblUudai);
+            groupBox2.Controls.Add(lblUuDai);
             groupBox2.Controls.Add(txtSDT);
             groupBox2.Controls.Add(lblTenKH);
             groupBox2.Controls.Add(lblDiem);
             groupBox2.Controls.Add(lblLoaiKH);
             groupBox2.Location = new Point(12, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(293, 200);
+            groupBox2.Size = new Size(416, 236);
             groupBox2.TabIndex = 14;
             groupBox2.TabStop = false;
             groupBox2.Text = "Thông tin Khách Hàng";
@@ -242,21 +246,21 @@
             // 
             lblBan.AutoSize = true;
             lblBan.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblBan.Location = new Point(154, 117);
+            lblBan.Location = new Point(258, 39);
             lblBan.Name = "lblBan";
             lblBan.Size = new Size(43, 23);
             lblBan.TabIndex = 16;
             lblBan.Text = "Bàn";
             // 
-            // lblUudai
+            // lblUuDai
             // 
-            lblUudai.AutoSize = true;
-            lblUudai.Font = new Font("Times New Roman", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            lblUudai.Location = new Point(6, 158);
-            lblUudai.Name = "lblUudai";
-            lblUudai.Size = new Size(54, 17);
-            lblUudai.TabIndex = 15;
-            lblUudai.Text = "Ưu Đãi";
+            lblUuDai.AutoSize = true;
+            lblUuDai.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lblUuDai.Location = new Point(164, 185);
+            lblUuDai.Name = "lblUuDai";
+            lblUuDai.Size = new Size(70, 23);
+            lblUuDai.TabIndex = 15;
+            lblUuDai.Text = "Ưu Đãi";
             // 
             // txtSDT
             // 
@@ -269,24 +273,93 @@
             // 
             // btnDong
             // 
-            btnDong.Location = new Point(378, 511);
+            btnDong.Location = new Point(801, 697);
             btnDong.Name = "btnDong";
-            btnDong.Size = new Size(94, 29);
+            btnDong.Size = new Size(117, 44);
             btnDong.TabIndex = 72;
             btnDong.Text = "Đóng";
             btnDong.UseVisualStyleBackColor = true;
+            btnDong.Click += btnDong_Click;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(lblTienBanHienTai);
+            groupBox3.Controls.Add(lblGhiChuBanCu);
+            groupBox3.Controls.Add(lblTienBanCu);
+            groupBox3.Location = new Point(12, 267);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(491, 237);
+            groupBox3.TabIndex = 73;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Tính Tiền";
+            // 
+            // lblTienBanHienTai
+            // 
+            lblTienBanHienTai.AutoSize = true;
+            lblTienBanHienTai.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lblTienBanHienTai.Location = new Point(15, 51);
+            lblTienBanHienTai.Name = "lblTienBanHienTai";
+            lblTienBanHienTai.Size = new Size(164, 23);
+            lblTienBanHienTai.TabIndex = 75;
+            lblTienBanHienTai.Text = "Tiền Bàn Hiện Tại";
+            // 
+            // lblGhiChuBanCu
+            // 
+            lblGhiChuBanCu.AutoSize = true;
+            lblGhiChuBanCu.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            lblGhiChuBanCu.Location = new Point(15, 155);
+            lblGhiChuBanCu.Name = "lblGhiChuBanCu";
+            lblGhiChuBanCu.Size = new Size(148, 23);
+            lblGhiChuBanCu.TabIndex = 74;
+            lblGhiChuBanCu.Text = "Ghi Chú Bàn Cũ";
+            // 
+            // lblTienBanCu
+            // 
+            lblTienBanCu.AutoSize = true;
+            lblTienBanCu.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            lblTienBanCu.Location = new Point(15, 104);
+            lblTienBanCu.Name = "lblTienBanCu";
+            lblTienBanCu.Size = new Size(115, 23);
+            lblTienBanCu.TabIndex = 73;
+            lblTienBanCu.Text = "Tiền Bàn Cũ";
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(lblTienGoc);
+            groupBox4.Controls.Add(lblGiamGia);
+            groupBox4.Controls.Add(lblTongTien);
+            groupBox4.Location = new Point(550, 280);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(368, 224);
+            groupBox4.TabIndex = 76;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Tổng Tiền";
+            // 
+            // groupBox5
+            // 
+            groupBox5.Controls.Add(txtTienKhach);
+            groupBox5.Controls.Add(lblTienThua);
+            groupBox5.Controls.Add(picQR);
+            groupBox5.Controls.Add(cboThanhToan);
+            groupBox5.Location = new Point(18, 527);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new Size(443, 234);
+            groupBox5.TabIndex = 77;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "Thanh Toán";
             // 
             // FrmTinhTien
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(573, 650);
-            Controls.Add(btnDong);
+            ClientSize = new Size(962, 798);
+            Controls.Add(groupBox5);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Controls.Add(picQR);
-            Controls.Add(cboThanhToan);
             Controls.Add(btnThanhToan);
+            Controls.Add(btnDong);
             Name = "FrmTinhTien";
             Text = "Tính Tiền";
             Load += FrmTinhTien_Load;
@@ -295,6 +368,12 @@
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -302,7 +381,7 @@
         private Label lblBatDau;
         private Label lblKetThuc;
         private Label lblThoiGian;
-        private Label lblGia;
+        private Label lblGiaBan;
         private Label lblTongTien;
         private Button btnThanhToan;
         private ComboBox cboThanhToan;
@@ -313,12 +392,18 @@
         private GroupBox groupBox1;
         private GroupBox groupBox2;
         private TextBox txtSDT;
-        private Label lblUudai;
+        private Label lblUuDai;
         private Label lblGiamGia;
         private Label lblTienGoc;
         private Label lblBan;
         private TextBox txtTienKhach;
         private Label lblTienThua;
         private Button btnDong;
+        private GroupBox groupBox3;
+        private Label lblGhiChuBanCu;
+        private Label lblTienBanCu;
+        private Label lblTienBanHienTai;
+        private GroupBox groupBox4;
+        private GroupBox groupBox5;
     }
 }

@@ -8,8 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using QuanLyTienGioBBD.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuanLyTienGioBBD.Forms
 {
@@ -18,55 +17,54 @@ namespace QuanLyTienGioBBD.Forms
         public FrmThongKeDoanhThu()
         {
             InitializeComponent();
-            SetupInitialUI(); // Thiết lập giao diện ban đầu
-            ApplyColors();    // Tô màu cho các Panel
+            SetupInitialUI();
+            ApplyColors();
+
+            dgvThongKe.CellFormatting += dgvThongKe_CellFormatting;
         }
 
-        // 1. Tô màu sắc cho các Panel (Dựa trên yêu cầu của bạn)
         private void ApplyColors()
         {
-            // Màu xanh ngọc cho Doanh Thu
             panelDoanhThu.BackColor = Color.Teal;
             lblTongDoanhThu.ForeColor = Color.White;
-
-            // Màu tím cho Giờ Chơi
             panelGioChoi.BackColor = Color.MediumPurple;
             lblTongGioChoi.ForeColor = Color.White;
-
-            // Màu đỏ cam cho Số Hóa Đơn
             panelSoHoaDon.BackColor = Color.Tomato;
             lblSoHoaDon.ForeColor = Color.White;
         }
 
-        // 2. Thiết lập cấu hình biểu đồ và bảng ban đầu
         private void SetupInitialUI()
         {
-            // Cấu hình biểu đồ (Chart)
-            chartDoanhThu.Series.Clear();
-            var series = new Series("Doanh Thu")
-            {
-                ChartType = SeriesChartType.Column, // Biểu đồ dạng cột
-                XValueType = ChartValueType.String,
-                IsValueShownAsLabel = true,         // Hiện số tiền trên đầu cột
-                Color = Color.DodgerBlue
-            };
-            chartDoanhThu.Series.Add(series);
-            chartDoanhThu.ChartAreas[0].AxisX.Title = "Ngày/Tháng";
-            chartDoanhThu.ChartAreas[0].AxisY.Title = "VNĐ";
-            chartDoanhThu.ChartAreas[0].AxisY.LabelStyle.Format = "N0";
-
-            // Làm trống dữ liệu hiển thị ban đầu
-            lblTongDoanhThu.Text = "0 VNĐ";
-            lblTongGioChoi.Text = "0 Giờ";
-            lblSoHoaDon.Text = "0";
-
-            // Cấu hình DataGridView để tự giãn cột
             dgvThongKe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvThongKe.ReadOnly = true;
+            dgvThongKe.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvThongKe.RowHeadersVisible = false;
+        }
+
+        // --- HÀM LỌC NGÀY NHANH ---
+        private void SetDateRange(DateTime start, DateTime end)
+        {
+            dtpTuNgay.Value = start;
+            dtpDenNgay.Value = end;
+            btnThongKe.PerformClick();
+        }
+
+        private void btnHomNay_Click(object sender, EventArgs e) => SetDateRange(DateTime.Today, DateTime.Today);
+
+        private void btnTuanNay_Click(object sender, EventArgs e)
+        {
+            DateTime start = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            SetDateRange(start, DateTime.Today);
+        }
+
+        private void btnThangNay_Click(object sender, EventArgs e)
+        {
+            DateTime start = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            SetDateRange(start, DateTime.Today);
         }
 
         private void btnThongKe_Click(object sender, EventArgs e)
         {
-            // Lấy khoảng thời gian chuẩn (từ 00:00 ngày bắt đầu đến 23:59 ngày kết thúc)
             DateTime tuNgay = dtpTuNgay.Value.Date;
             DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddTicks(-1);
 
@@ -74,75 +72,123 @@ namespace QuanLyTienGioBBD.Forms
             {
                 using (var db = new QLBidaDbContext())
                 {
-                    // Lấy danh sách hóa đơn từ Database dựa trên GioBatDau
-                    var dsHoaDon = db.HoaDon
+                    // 1. Lấy dữ liệu từ Database
+                    var dsRaw = db.HoaDon
+                        .Include(h => h.BanBida)
                         .Where(h => h.GioBatDau >= tuNgay && h.GioBatDau <= denNgay)
                         .ToList();
 
-                    if (dsHoaDon.Count == 0)
+                    if (!dsRaw.Any()) { ClearData(); return; }
+
+                    // 2. Tính toán Dashboard
+                    var dsDaThanhToan = dsRaw.Where(h => (h.TongTien ?? 0) > 0).ToList();
+
+                    lblTongDoanhThu.Text = string.Format("{0:N0} VNĐ", dsDaThanhToan.Sum(h => h.TongTien ?? 0));
+                    lblSoHoaDon.Text = dsDaThanhToan.Count.ToString();
+
+                    // Tính tổng giờ chơi quy đổi sang định dạng "Xh Ym"
+                    double tongPhutTongCong = dsRaw.Sum(h => ((h.GioKetThuc ?? DateTime.Now) - h.GioBatDau).TotalMinutes);
+                    int hTotal = (int)tongPhutTongCong / 60;
+                    int mTotal = (int)tongPhutTongCong % 60;
+                    lblTongGioChoi.Text = string.Format("{0}h {1}m", hTotal, mTotal);
+
+                    // 3. Hiển thị lên lưới DataGridView
+                    dgvThongKe.DataSource = dsRaw.Select(h =>
                     {
-                        MessageBox.Show("Không tìm thấy dữ liệu trong khoảng thời gian này!", "Thông báo");
-                        // Reset về 0 nếu không có dữ liệu
-                        lblTongDoanhThu.Text = "0 VNĐ";
-                        lblTongGioChoi.Text = "0 Giờ";
-                        lblSoHoaDon.Text = "0";
-                        dgvThongKe.DataSource = null;
-                        chartDoanhThu.Series["Doanh Thu"].Points.Clear();
-                        return;
-                    }
+                        TimeSpan ts = (h.GioKetThuc ?? DateTime.Now) - h.GioBatDau;
+                        return new
+                        {
+                            h.MaHD,
+                            NgayLap = h.GioBatDau.ToString("dd/MM HH:mm"),
+                            TenBan = h.BanBida?.TenBan ?? "Bàn " + h.BanBidaID,
+                            TrangThai = (h.TongTien > 0) ? "Đã thanh toán" : "Đang chơi",
+                            SoGio = string.Format("{0}h {1}m", (int)ts.TotalHours, ts.Minutes),
+                            TongTien = h.TongTien ?? 0
+                        };
+                    }).OrderByDescending(x => x.MaHD).ToList();
 
-                    // --- PHẦN 1: TÍNH TOÁN CÁC CHỈ SỐ TỔNG ---
-                    decimal tongTien = dsHoaDon.Sum(h => h.TongTien ?? 0);
-                    int soHD = dsHoaDon.Count();
-
-                    // Tính tổng giờ chơi (Kết thúc - Bắt đầu)
-                    double tongGio = dsHoaDon
-                        .Where(h => h.GioKetThuc.HasValue)
-                        .Sum(h => (h.GioKetThuc.Value - h.GioBatDau).TotalHours);
-
-                    // Cập nhật lên các Label
-                    lblTongDoanhThu.Text = string.Format("{0:N0} VNĐ", tongTien);
-                    lblTongGioChoi.Text = tongGio.ToString("N1") + " Giờ";
-                    lblSoHoaDon.Text = soHD.ToString();
-
-                    // --- PHẦN 2: ĐỔ DỮ LIỆU VÀO DATAGRIDVIEW ---
-                    dgvThongKe.DataSource = dsHoaDon.Select(h => new {
-                        MaHD = h.MaHD,
-                        NgayLap = h.GioBatDau.ToString("dd/MM/yyyy"),
-                        Ban = "Bàn " + h.BanBidaID,
-                        SoGio = h.GioKetThuc.HasValue ? (h.GioKetThuc.Value - h.GioBatDau).TotalHours.ToString("N1") : "0",
-                        TongTien = h.TongTien
-                    }).ToList();
-
-                    // --- PHẦN 3: VẼ BIỂU ĐỒ DOANH THU THEO NGÀY ---
-                    chartDoanhThu.Series["Doanh Thu"].Points.Clear();
-                    var duLieuBieuDo = dsHoaDon
-                        .GroupBy(h => h.GioBatDau.ToString("dd/MM"))
-                        .Select(g => new { Ngay = g.Key, DoanhThu = g.Sum(h => h.TongTien ?? 0) })
-                        .OrderBy(x => x.Ngay);
-
-                    foreach (var item in duLieuBieuDo)
-                    {
-                        chartDoanhThu.Series["Doanh Thu"].Points.AddXY(item.Ngay, item.DoanhThu);
-                    }
+                    FormatGridView();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message);
+                MessageBox.Show("Lỗi khi thống kê: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
+        }
+        }
+
+            private void FormatGridView()
+        {
+            if (dgvThongKe.Columns["MaHD"] != null)
+            {
+                dgvThongKe.Columns["MaHD"].HeaderText = "Mã HĐ";
+                dgvThongKe.Columns["NgayLap"].HeaderText = "Ngày Lập";
+                dgvThongKe.Columns["TenBan"].HeaderText = "Tên Bàn";
+                dgvThongKe.Columns["SoGio"].HeaderText = "Giờ Chơi";
+                dgvThongKe.Columns["TrangThai"].HeaderText = "Trạng Thái";
+                dgvThongKe.Columns["TongTien"].HeaderText = "Tổng Tiền";
+
+                dgvThongKe.Columns["TongTien"].DefaultCellStyle.Format = "N0";
+                dgvThongKe.Columns["TongTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvThongKe.Columns["SoGio"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
+        }
+
+        private void ClearData()
+        {
+            lblTongDoanhThu.Text = "0 VNĐ";
+            lblTongGioChoi.Text = "0h 0m";
+            lblSoHoaDon.Text = "0";
+            dgvThongKe.DataSource = null;
         }
 
         private void btnXuat_Click(object sender, EventArgs e)
         {
-            if (dgvThongKe.Rows.Count == 0)
+            if (dgvThongKe.Rows.Count == 0) return;
+
+            SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx", FileName = "ThongKeDoanhThu.xlsx" };
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Vui lòng thực hiện thống kê trước khi xuất dữ liệu!");
-                return;
+                using (var workbook = new ClosedXML.Excel.XLWorkbook())
+                {
+                    // Chuyển DataGridView thành DataTable để xuất
+                    DataTable dt = new DataTable();
+                    foreach (DataGridViewColumn col in dgvThongKe.Columns) dt.Columns.Add(col.HeaderText);
+                    foreach (DataGridViewRow row in dgvThongKe.Rows)
+                    {
+                        DataRow dr = dt.NewRow();
+                        for (int i = 0; i < dgvThongKe.Columns.Count; i++) dr[i] = row.Cells[i].Value;
+                        dt.Rows.Add(dr);
+                    }
+
+                    var sheet = workbook.Worksheets.Add(dt, "Thống kê");
+                    sheet.Columns().AdjustToContents();
+                    workbook.SaveAs(sfd.FileName);
+                    MessageBox.Show("Xuất file thành công!");
+                }
+            }
             }
 
-            // Bạn có thể thêm thư viện EPPlus để viết code xuất Excel ở đây
-            MessageBox.Show("Tính năng Xuất Excel đã sẵn sàng kết nối.");
+        private void dgvThongKe_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvThongKe.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
+            {
+                if (e.Value.ToString() == "Đang chơi")
+                {
+                    dgvThongKe.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Red;
+                    dgvThongKe.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvThongKe.Font, FontStyle.Bold);
+                }
+                else
+                {
+                    dgvThongKe.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Black;
+                    dgvThongKe.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvThongKe.Font, FontStyle.Regular);
+                }
+            }
         }
     }
 }
+    
+
+            
+    
+

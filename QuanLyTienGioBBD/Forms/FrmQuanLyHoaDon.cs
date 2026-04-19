@@ -1,15 +1,11 @@
 ﻿using QuanLyTienGioBBD.Data;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using OfficeOpenXml;
+using ClosedXML.Excel;
 using System.IO;
 
 namespace QuanLyTienGioBBD.Forms
@@ -18,49 +14,68 @@ namespace QuanLyTienGioBBD.Forms
     {
         private QLBidaDbContext db = new QLBidaDbContext();
         private string currentRole;
-        private PrintDocument pd = new PrintDocument();
-        private HoaDon hoaDonInLai = null;
         public FrmQuanLyHoaDon(string role)
         {
-            InitializeComponent();
+            InitializeComponent();          
             this.currentRole = role;
-            pd.PrintPage += Pd_PrintPage;
+        }
+
+        void LoadComboBan()
+        {
+            // Lấy danh sách từ bảng Ban (Dựa trên lỗi cũ của bạn là db.Ban)
+            var listBan = db.Ban.Select(x => new { x.MaBan, x.TenBan }).ToList();
+            listBan.Insert(0, new { MaBan = 0, TenBan = "--- Tất cả bàn ---" });
+
+            cboBan.DataSource = listBan;
+            cboBan.DisplayMember = "TenBan";
+            cboBan.ValueMember = "MaBan";
         }
 
         void LoadLichSu()
         {
-            db = new QLBidaDbContext(); // Làm tươi context
+            db = new QLBidaDbContext(); // Làm mới dữ liệu
 
             var tuNgay = dtpTuNgay.Value.Date;
             var denNgay = dtpDenNgay.Value.Date.AddDays(1);
-            string sdt = txtTimKiem.Text.Trim();
+            string key = txtTimKiem.Text.Trim().ToLower();
+            int maBanHienTai = (cboBan.SelectedValue != null) ? (int)cboBan.SelectedValue : 0;
 
             var query = db.HoaDon.AsQueryable();
 
-            // Lọc theo thời gian
+            // 1. Lọc theo thời gian
             query = query.Where(x => x.GioKetThuc >= tuNgay && x.GioKetThuc < denNgay);
 
-            // Lọc theo SĐT nếu có nhập
-            if (!string.IsNullOrEmpty(sdt))
+            // 2. Lọc theo Bàn (Dùng BanBidaID theo model HoaDon của bạn)
+            if (maBanHienTai > 0)
             {
-                query = query.Where(x => x.KhachHang.DienThoai.Contains(sdt));
+                query = query.Where(x => x.BanBidaID == maBanHienTai);
             }
 
-            // Lấy dữ liệu về List để tính toán
+            // 3. Tìm kiếm theo Mã, Tên KH hoặc SĐT
+            if (!string.IsNullOrEmpty(key))
+            {
+                query = query.Where(x => x.MaHD.ToString() == key ||
+                                         (x.KhachHang != null && x.KhachHang.TenKH.ToLower().Contains(key)) ||
+                                         (x.KhachHang != null && x.KhachHang.DienThoai.Contains(key)));
+            }
+
+            // 4. Đổ dữ liệu ra anonymous object (Khớp chuẩn TenNV)
             var dataResult = query.Select(x => new
             {
                 MaHD = x.MaHD,
                 TenBan = x.BanBida.TenBan,
                 KhachHang = x.KhachHang != null ? x.KhachHang.TenKH : "Khách lẻ",
                 SDT = x.KhachHang != null ? x.KhachHang.DienThoai : "",
+                // Đã sửa thành TenNV theo model NhanVien bạn gửi
+                NhanVien = x.NhanVien != null ? x.NhanVien.TenNV : "Admin",
                 Vao = x.GioBatDau,
                 Ra = x.GioKetThuc,
-                TongTien = x.TongTien ?? 0 // Tránh lỗi Null
+                TongTien = x.TongTien ?? 0
             }).OrderByDescending(x => x.Ra).ToList();
 
             dgvLichSu.DataSource = dataResult;
 
-            // Tính tổng doanh thu trực tiếp từ List dataResult cho nhanh
+            // Tính tổng tiền
             decimal tong = dataResult.Sum(x => x.TongTien);
             lblTongDoanhThu.Text = "Tổng doanh thu: " + tong.ToString("N0") + " VND";
 
@@ -73,19 +88,22 @@ namespace QuanLyTienGioBBD.Forms
             if (dgvLichSu.Columns["TongTien"] != null)
             {
                 dgvLichSu.Columns["TongTien"].HeaderText = "Thành Tiền";
-                dgvLichSu.Columns["TongTien"].DefaultCellStyle.Format = "N0"; // Hiện 50,000 thay vì 50000
+                dgvLichSu.Columns["TongTien"].DefaultCellStyle.Format = "N0";
+                dgvLichSu.Columns["TongTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvLichSu.Columns["TongTien"].DefaultCellStyle.ForeColor = Color.Blue;
             }
         }
         private void FrmQuanLyHoaDon_Load(object sender, EventArgs e)
         {
-            // Mặc định xem từ đầu ngày hôm nay đến hết ngày hôm nay
+            // Thiết lập ngày mặc định
             dtpTuNgay.Value = DateTime.Now.Date;
             dtpDenNgay.Value = DateTime.Now.Date;
 
-            // Phân quyền
+            LoadComboBan();
+
+            // Phân quyền hiển thị tổng doanh thu
             bool isAdmin = string.Equals(currentRole, "Admin", StringComparison.OrdinalIgnoreCase);
-            btnXoa.Enabled = isAdmin;
-            lblTongDoanhThu.Visible = isAdmin; // Chỉ chủ mới được xem tổng tiền
+            lblTongDoanhThu.Visible = isAdmin;
 
             LoadLichSu();
         }
@@ -96,30 +114,10 @@ namespace QuanLyTienGioBBD.Forms
             LoadLichSu();
 
         }
-
-        private void btnXoa_Click(object sender, EventArgs e)
-        {
-            if (dgvLichSu.CurrentRow == null) return;
-            int maHD = (int)dgvLichSu.CurrentRow.Cells["MaHD"].Value;
-
-            if (MessageBox.Show($"Xóa hóa đơn #{maHD} sẽ làm thay đổi báo cáo doanh thu. Tiếp tục?",
-                "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-            {
-                var hd = db.HoaDon.Find(maHD);
-                if (hd != null)
-                {
-                    db.HoaDon.Remove(hd);
-                    db.SaveChanges();
-                    LoadLichSu();
-                    MessageBox.Show("Đã xóa hóa đơn.");
-                }
-            }
-
-        }
-
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTimKiem.Clear();
+            if (cboBan.Items.Count > 0) cboBan.SelectedIndex = 0;
             dtpTuNgay.Value = DateTime.Now.Date;
             dtpDenNgay.Value = DateTime.Now.Date;
             LoadLichSu();
@@ -144,113 +142,91 @@ namespace QuanLyTienGioBBD.Forms
             lblTongDoanhThu.Text = "Tổng tiền: " + tong.ToString("N0") + " VND";
         }
 
-        private void btnInLaiBill_Click(object sender, EventArgs e)
-        {
-            if (dgvLichSu.CurrentRow == null) return;
-
-            int maHD = Convert.ToInt32(dgvLichSu.CurrentRow.Cells["MaHD"].Value);
-            hoaDonInLai = db.HoaDon.FirstOrDefault(x => x.MaHD == maHD);
-
-            if (hoaDonInLai != null)
-            {
-                PrintPreviewDialog ppd = new PrintPreviewDialog { Document = pd };
-                ppd.ShowDialog();
-
-            }
-        }
-        private void Pd_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            if (hoaDonInLai == null) return;
-
-            Graphics g = e.Graphics;
-            Font fTitle = new Font("Arial", 18, FontStyle.Bold);
-            Font fBody = new Font("Arial", 10, FontStyle.Regular);
-            Font fHeader = new Font("Arial", 10, FontStyle.Bold);
-
-            float y = 20;
-            g.DrawString("BIDA HTRAN - COPY BILL", fTitle, Brushes.Black, 50, y); y += 40;
-            g.DrawString($"Mã HĐ: #{hoaDonInLai.MaHD}", fBody, Brushes.Black, 10, y); y += 20;
-            g.DrawString($"Thời gian ra: {hoaDonInLai.GioKetThuc:dd/MM/yyyy HH:mm}", fBody, Brushes.Black, 10, y); y += 20;
-            g.DrawString($"Bàn: {hoaDonInLai.BanBida.TenBan}", fBody, Brushes.Black, 10, y); y += 20;
-            g.DrawLine(Pens.Black, 10, y, 300, y); y += 10;
-            g.DrawString($"TỔNG TIỀN: {hoaDonInLai.TongTien?.ToString("N0")} VND",
-                new Font("Arial", 12, FontStyle.Bold), Brushes.Black, 10, y);
-        }
 
         private void btnXuat_Click(object sender, EventArgs e)
         {
-            if (dgvLichSu.Rows.Count == 0)
-            {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo");
-                return;
-            }
+            // 1. Thiết lập lưu file
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Title = "Xuất hóa đơn ra tập tin Excel";
+            sfd.Filter = "Excel Workbook|*.xlsx";
+            sfd.FileName = "BaoCaoDoanhThu_" + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".xlsx";
 
-            using (SaveFileDialog sfd = new SaveFileDialog())
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
-                sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
-                sfd.FileName = "BaoCaoDoanhThu_" + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".xlsx";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    try
+                    // 2. Tạo DataTable để chứa dữ liệu
+                    DataTable table = new DataTable();
+                    table.Columns.Add("Mã HD", typeof(int));
+                    table.Columns.Add("Tên Bàn", typeof(string));
+                    table.Columns.Add("Khách Hàng", typeof(string));
+                    table.Columns.Add("Nhân Viên", typeof(string));
+                    table.Columns.Add("Giờ Vào", typeof(DateTime));
+                    table.Columns.Add("Giờ Ra", typeof(DateTime));
+                    table.Columns.Add("Thành Tiền", typeof(decimal));
+
+                    // 3. Lấy dữ liệu từ Database (Sử dụng các bộ lọc hiện tại trên Form)
+                    var tuNgay = dtpTuNgay.Value.Date;
+                    var denNgay = dtpDenNgay.Value.Date.AddDays(1);
+                    int maBanHienTai = (cboBan.SelectedValue != null) ? (int)cboBan.SelectedValue : 0;
+
+                    var query = db.HoaDon.Where(x => x.GioKetThuc >= tuNgay && x.GioKetThuc < denNgay);
+
+                    if (maBanHienTai > 0)
+                        query = query.Where(x => x.BanBidaID == maBanHienTai);
+
+                    var danhSachHoaDon = query.ToList();
+
+                    // 4. Đổ dữ liệu vào DataTable
+                    if (danhSachHoaDon != null)
                     {
-                        // Thiết lập bản quyền cho EPPlus (Bắt buộc)
-                        ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-
-                        using (ExcelPackage pck = new ExcelPackage())
+                        foreach (var h in danhSachHoaDon)
                         {
-                            // Tạo một sheet mới
-                            ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Doanh Thu");
-
-                            // 1. Tạo tiêu đề cột (Header) dựa trên DataGridView
-                            int colIndex = 1;
-                            foreach (DataGridViewColumn col in dgvLichSu.Columns)
-                            {
-                                if (col.Visible) // Chỉ xuất các cột đang hiện
-                                {
-                                    ws.Cells[1, colIndex].Value = col.HeaderText;
-                                    ws.Cells[1, colIndex].Style.Font.Bold = true;
-                                    ws.Cells[1, colIndex].Style.Fill.SetBackground(Color.LightGray);
-                                    colIndex++;
-                                }
-                            }
-
-                            // 2. Đổ dữ liệu từ lưới vào Excel
-                            for (int i = 0; i < dgvLichSu.Rows.Count; i++)
-                            {
-                                int excelCol = 1;
-                                for (int j = 0; j < dgvLichSu.Columns.Count; j++)
-                                {
-                                    if (dgvLichSu.Columns[j].Visible)
-                                    {
-                                        var cellValue = dgvLichSu.Rows[i].Cells[j].Value;
-                                        ws.Cells[i + 2, excelCol].Value = cellValue;
-
-                                        // Định dạng ngày tháng nếu là cột thời gian
-                                        if (cellValue is DateTime)
-                                        {
-                                            ws.Cells[i + 2, excelCol].Style.Numberformat.Format = "dd/mm/yyyy HH:mm";
-                                        }
-                                        excelCol++;
-                                    }
-                                }
-                            }
-
-                            // 3. Tự động căn chỉnh độ rộng cột
-                            ws.Cells.AutoFitColumns();
-
-                            // 4. Lưu file
-                            File.WriteAllBytes(sfd.FileName, pck.GetAsByteArray());
-                            MessageBox.Show("Xuất file Excel thành công!", "Chúc mừng");
+                            table.Rows.Add(
+                                h.MaHD,
+                                h.BanBida?.TenBan,
+                                h.KhachHang?.TenKH ?? "Khách lẻ",
+                                h.NhanVien?.TenNV ?? "Admin",
+                                h.GioBatDau,
+                                h.GioKetThuc,
+                                h.TongTien ?? 0
+                            );
                         }
                     }
-                    catch (Exception ex)
+
+                    // 5. Sử dụng ClosedXML (XLWorkbook) để tạo file Excel
+                    using (ClosedXML.Excel.XLWorkbook wb = new ClosedXML.Excel.XLWorkbook())
                     {
-                        MessageBox.Show("Lỗi khi xuất Excel: " + ex.Message);
+                        var sheet = wb.Worksheets.Add(table, "Doanh Thu");
+
+                        // Định dạng cột tiền có dấu phẩy phân cách
+                        sheet.Column(7).Style.NumberFormat.Format = "#,##0";
+
+                        // Tự động căn chỉnh độ rộng cột
+                        sheet.Columns().AdjustToContents();
+
+                        // Lưu file
+                        wb.SaveAs(sfd.FileName);
+
+                        MessageBox.Show("Đã xuất dữ liệu ra tập tin Excel thành công.", "Thành công",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi xuất dữ liệu: " + ex.Message, "Lỗi",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
             }
+            }
+                }
+        
+        private void cboBan_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboBan.Focused) LoadLichSu();
         }
+
+       
     }
 }
 

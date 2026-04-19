@@ -21,6 +21,8 @@ namespace QuanLyTienGioBBD.Data
         public DbSet<Users> Users { get; set; }
         public DbSet<LoaiKhach> LoaiKhach { get; set; }
 
+       
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

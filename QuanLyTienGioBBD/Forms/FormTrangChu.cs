@@ -33,9 +33,9 @@ namespace QuanLyTienGioBBD.Forms
 
                 // Nếu bạn muốn nhân viên vẫn được xem danh sách khách nhưng không được sửa/xóa 
                 // thì để Visible = true nhưng xử lý bên trong FrmKhachHang
-            
 
-        }
+
+            }
         }
 
         private void mnuThoat_Click(object sender, EventArgs e)
@@ -118,5 +118,7 @@ namespace QuanLyTienGioBBD.Forms
                MessageBoxIcon.Information
            );
         }
+
+      
     }
-}
+    }

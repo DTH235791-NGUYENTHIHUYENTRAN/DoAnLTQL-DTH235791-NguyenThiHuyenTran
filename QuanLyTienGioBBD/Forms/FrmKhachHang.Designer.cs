@@ -42,13 +42,15 @@
             lblKhach = new Label();
             cboLoaiKH = new ComboBox();
             groupBox1 = new GroupBox();
-            cboUuDai = new ComboBox();
+            txtUuDai = new TextBox();
             txtDiem = new TextBox();
             txtMaKH = new TextBox();
             lblUuDai = new Label();
             lblDiem = new Label();
             lblMaKh = new Label();
             txtTimKiem = new TextBox();
+            btnXuat = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvKhachHang).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -81,7 +83,7 @@
             // btnXoa
             // 
             btnXoa.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnXoa.Location = new Point(702, 252);
+            btnXoa.Location = new Point(673, 251);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(94, 29);
             btnXoa.TabIndex = 45;
@@ -92,7 +94,7 @@
             // btnHuybo
             // 
             btnHuybo.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnHuybo.Location = new Point(556, 252);
+            btnHuybo.Location = new Point(397, 252);
             btnHuybo.Name = "btnHuybo";
             btnHuybo.Size = new Size(94, 29);
             btnHuybo.TabIndex = 43;
@@ -103,7 +105,7 @@
             // btnLuu
             // 
             btnLuu.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnLuu.Location = new Point(397, 252);
+            btnLuu.Location = new Point(263, 252);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(94, 29);
             btnLuu.TabIndex = 41;
@@ -114,7 +116,7 @@
             // btnThem
             // 
             btnThem.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnThem.Location = new Point(80, 252);
+            btnThem.Location = new Point(24, 252);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(94, 29);
             btnThem.TabIndex = 40;
@@ -161,7 +163,7 @@
             // btnSua
             // 
             btnSua.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnSua.Location = new Point(245, 252);
+            btnSua.Location = new Point(136, 252);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(94, 29);
             btnSua.TabIndex = 42;
@@ -186,10 +188,11 @@
             cboLoaiKH.Name = "cboLoaiKH";
             cboLoaiKH.Size = new Size(217, 28);
             cboLoaiKH.TabIndex = 51;
+            cboLoaiKH.SelectedIndexChanged += cboLoaiKH_SelectedIndexChanged;
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(cboUuDai);
+            groupBox1.Controls.Add(txtUuDai);
             groupBox1.Controls.Add(txtDiem);
             groupBox1.Controls.Add(lblKhach);
             groupBox1.Controls.Add(cboLoaiKH);
@@ -209,13 +212,12 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin khách hàng";
             // 
-            // cboUuDai
+            // txtUuDai
             // 
-            cboUuDai.FormattingEnabled = true;
-            cboUuDai.Location = new Point(513, 129);
-            cboUuDai.Name = "cboUuDai";
-            cboUuDai.Size = new Size(125, 28);
-            cboUuDai.TabIndex = 52;
+            txtUuDai.Location = new Point(510, 126);
+            txtUuDai.Name = "txtUuDai";
+            txtUuDai.Size = new Size(125, 28);
+            txtUuDai.TabIndex = 52;
             // 
             // txtDiem
             // 
@@ -223,7 +225,6 @@
             txtDiem.Name = "txtDiem";
             txtDiem.Size = new Size(125, 28);
             txtDiem.TabIndex = 44;
-//            txtDiem.TextChanged += txtDiem_TextChanged;
             txtDiem.KeyPress += txtDiem_KeyPress;
             // 
             // txtMaKH
@@ -268,11 +269,33 @@
             txtTimKiem.TabIndex = 53;
             txtTimKiem.TextChanged += txtTimKiem_TextChanged;
             // 
+            // btnXuat
+            // 
+            btnXuat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnXuat.Location = new Point(534, 252);
+            btnXuat.Name = "btnXuat";
+            btnXuat.Size = new Size(94, 29);
+            btnXuat.TabIndex = 54;
+            btnXuat.Text = "Xuất";
+            btnXuat.UseVisualStyleBackColor = true;
+            btnXuat.Click += btnXuat_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(712, 122);
+            button1.Name = "button1";
+            button1.Size = new Size(8, 8);
+            button1.TabIndex = 55;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            // 
             // FrmKhachHang
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(840, 541);
+            Controls.Add(button1);
+            Controls.Add(btnXuat);
             Controls.Add(txtTimKiem);
             Controls.Add(groupBox1);
             Controls.Add(dgvKhachHang);
@@ -312,7 +335,9 @@
         private Label lblDiem;
         private Label lblMaKh;
         private TextBox txtDiem;
-        private ComboBox cboUuDai;
         private TextBox txtTimKiem;
+        private TextBox txtUuDai;
+        private Button btnXuat;
+        private Button button1;
     }
 }

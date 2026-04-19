@@ -43,6 +43,8 @@
             btnBatDau = new Button();
             btnThanhToan = new Button();
             btnHuyBo = new Button();
+            btnChuyenBan = new Button();
+            button1 = new Button();
             groupBoxThuong.SuspendLayout();
             groupBoxThongTin.SuspendLayout();
             SuspendLayout();
@@ -182,7 +184,7 @@
             // 
             // btnHuyBo
             // 
-            btnHuyBo.Location = new Point(799, 389);
+            btnHuyBo.Location = new Point(791, 389);
             btnHuyBo.Name = "btnHuyBo";
             btnHuyBo.Size = new Size(94, 29);
             btnHuyBo.TabIndex = 10;
@@ -190,11 +192,32 @@
             btnHuyBo.UseVisualStyleBackColor = true;
             btnHuyBo.Click += btnHuyBo_Click;
             // 
+            // btnChuyenBan
+            // 
+            btnChuyenBan.Location = new Point(791, 454);
+            btnChuyenBan.Name = "btnChuyenBan";
+            btnChuyenBan.Size = new Size(94, 29);
+            btnChuyenBan.TabIndex = 11;
+            btnChuyenBan.Text = "Chuyển Bàn";
+            btnChuyenBan.UseVisualStyleBackColor = true;
+            btnChuyenBan.Click += btnChuyenBan_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(864, 535);
+            button1.Name = "button1";
+            button1.Size = new Size(8, 8);
+            button1.TabIndex = 12;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            // 
             // FrmQuanLyBan
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(909, 575);
+            Controls.Add(button1);
+            Controls.Add(btnChuyenBan);
             Controls.Add(btnHuyBo);
             Controls.Add(btnThanhToan);
             Controls.Add(btnBatDau);
@@ -228,5 +251,7 @@
         private Label lblLoaiBan;
         private ComboBox cboLoaiBan;
         private Button btnHuyBo;
+        private Button btnChuyenBan;
+        private Button button1;
     }
 }

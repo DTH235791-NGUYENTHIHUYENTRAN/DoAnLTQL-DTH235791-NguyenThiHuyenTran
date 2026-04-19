@@ -31,14 +31,17 @@ namespace QuanLyTienGioBBD.Forms
 
         void LoadNhanVien()
         {
-           
-                var dsNV = db.NhanVien.ToList();
-                cboNhanVien.DataSource = dsNV;
-                cboNhanVien.DisplayMember = "TenNV";
-                cboNhanVien.ValueMember = "MaNV";
-                cboNhanVien.SelectedIndex = -1;
+            db = new QLBidaDbContext();
+            var dsNV = db.NhanVien
+              .Where(nv => nv.ChucVu == "Nhân viên" && nv.TrangThai == true)
+              .ToList();
 
-            
+            cboNhanVien.DataSource = dsNV;
+            cboNhanVien.DisplayMember = "TenNV";
+            cboNhanVien.ValueMember = "MaNV";
+            cboNhanVien.SelectedIndex = -1;
+
+
         }
 
 

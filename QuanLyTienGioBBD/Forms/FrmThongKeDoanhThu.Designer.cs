@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            chartDoanhThu = new System.Windows.Forms.DataVisualization.Charting.Chart();
             dtpTuNgay = new DateTimePicker();
             dtpDenNgay = new DateTimePicker();
             btnThongKe = new Button();
@@ -45,34 +41,17 @@
             lblSoHoaDon = new Label();
             label5 = new Label();
             dgvThongKe = new DataGridView();
-            btnXuat = new Button();
             NgayLap = new DataGridViewTextBoxColumn();
             MaHD = new DataGridViewTextBoxColumn();
             TenBan = new DataGridViewTextBoxColumn();
             SoGio = new DataGridViewTextBoxColumn();
             TongTien = new DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)chartDoanhThu).BeginInit();
+            btnXuat = new Button();
             panelDoanhThu.SuspendLayout();
             panelGioChoi.SuspendLayout();
             panelSoHoaDon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvThongKe).BeginInit();
             SuspendLayout();
-            // 
-            // chartDoanhThu
-            // 
-            chartArea1.Name = "ChartArea1";
-            chartDoanhThu.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            chartDoanhThu.Legends.Add(legend1);
-            chartDoanhThu.Location = new Point(12, 160);
-            chartDoanhThu.Name = "chartDoanhThu";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            chartDoanhThu.Series.Add(series1);
-            chartDoanhThu.Size = new Size(309, 286);
-            chartDoanhThu.TabIndex = 0;
-            chartDoanhThu.Text = "chart1";
             // 
             // dtpTuNgay
             // 
@@ -92,7 +71,7 @@
             // 
             // btnThongKe
             // 
-            btnThongKe.Location = new Point(12, 505);
+            btnThongKe.Location = new Point(38, 134);
             btnThongKe.Name = "btnThongKe";
             btnThongKe.Size = new Size(94, 29);
             btnThongKe.TabIndex = 3;
@@ -183,23 +162,17 @@
             // 
             // dgvThongKe
             // 
+            dgvThongKe.AllowUserToAddRows = false;
+            dgvThongKe.AllowUserToDeleteRows = false;
+            dgvThongKe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvThongKe.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvThongKe.Columns.AddRange(new DataGridViewColumn[] { NgayLap, MaHD, TenBan, SoGio, TongTien });
-            dgvThongKe.Location = new Point(362, 213);
+            dgvThongKe.Location = new Point(38, 186);
             dgvThongKe.Name = "dgvThongKe";
             dgvThongKe.RowHeadersWidth = 51;
-            dgvThongKe.Size = new Size(650, 279);
+            dgvThongKe.Size = new Size(951, 550);
             dgvThongKe.TabIndex = 7;
-            // 
-            // btnXuat
-            // 
-            btnXuat.Location = new Point(155, 505);
-            btnXuat.Name = "btnXuat";
-            btnXuat.Size = new Size(94, 29);
-            btnXuat.TabIndex = 8;
-            btnXuat.Text = "Xuất Excel";
-            btnXuat.UseVisualStyleBackColor = true;
-            btnXuat.Click += btnXuat_Click;
+            dgvThongKe.CellFormatting += dgvThongKe_CellFormatting;
             // 
             // NgayLap
             // 
@@ -207,7 +180,6 @@
             NgayLap.HeaderText = "Ngày Lập";
             NgayLap.MinimumWidth = 6;
             NgayLap.Name = "NgayLap";
-            NgayLap.Width = 125;
             // 
             // MaHD
             // 
@@ -215,7 +187,6 @@
             MaHD.HeaderText = "Mã HĐ";
             MaHD.MinimumWidth = 6;
             MaHD.Name = "MaHD";
-            MaHD.Width = 125;
             // 
             // TenBan
             // 
@@ -223,7 +194,6 @@
             TenBan.HeaderText = "Tên Bàn";
             TenBan.MinimumWidth = 6;
             TenBan.Name = "TenBan";
-            TenBan.Width = 125;
             // 
             // SoGio
             // 
@@ -231,7 +201,6 @@
             SoGio.HeaderText = "Số Giờ";
             SoGio.MinimumWidth = 6;
             SoGio.Name = "SoGio";
-            SoGio.Width = 125;
             // 
             // TongTien
             // 
@@ -239,13 +208,22 @@
             TongTien.HeaderText = "Tổng Tiền";
             TongTien.MinimumWidth = 6;
             TongTien.Name = "TongTien";
-            TongTien.Width = 125;
+            // 
+            // btnXuat
+            // 
+            btnXuat.Location = new Point(169, 134);
+            btnXuat.Name = "btnXuat";
+            btnXuat.Size = new Size(94, 29);
+            btnXuat.TabIndex = 8;
+            btnXuat.Text = "Xuất Excel";
+            btnXuat.UseVisualStyleBackColor = true;
+            btnXuat.Click += btnXuat_Click;
             // 
             // FrmThongKeDoanhThu
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1123, 606);
+            ClientSize = new Size(1029, 748);
             Controls.Add(btnXuat);
             Controls.Add(dgvThongKe);
             Controls.Add(panelSoHoaDon);
@@ -254,10 +232,8 @@
             Controls.Add(btnThongKe);
             Controls.Add(dtpDenNgay);
             Controls.Add(dtpTuNgay);
-            Controls.Add(chartDoanhThu);
             Name = "FrmThongKeDoanhThu";
             Text = "FrmThongKeDoanhThu";
-            ((System.ComponentModel.ISupportInitialize)chartDoanhThu).EndInit();
             panelDoanhThu.ResumeLayout(false);
             panelDoanhThu.PerformLayout();
             panelGioChoi.ResumeLayout(false);
@@ -269,8 +245,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartDoanhThu;
         private DateTimePicker dtpTuNgay;
         private DateTimePicker dtpDenNgay;
         private Button btnThongKe;

@@ -40,7 +40,7 @@
             // lblBan
             // 
             lblBan.AutoSize = true;
-            lblBan.Location = new Point(159, 9);
+            lblBan.Location = new Point(66, 9);
             lblBan.Name = "lblBan";
             lblBan.Size = new Size(41, 20);
             lblBan.TabIndex = 0;
@@ -105,7 +105,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(459, 260);
+            ClientSize = new Size(450, 324);
             Controls.Add(btnHuy);
             Controls.Add(btnBatDau);
             Controls.Add(lblnv);

@@ -16,211 +16,333 @@ namespace QuanLyTienGioBBD
         private QLBidaDbContext db = new QLBidaDbContext();
         private int? maDangChon = null;
         private string role;
+        private bool dangThem = false;
 
         public FrmNhanVien(string role)
         {
             InitializeComponent();
             this.role = role;
-
-            // XỊN: Ẩn mật khẩu trong TextBox khi gõ
             txtMatKhau.UseSystemPasswordChar = true;
         }
 
         private void FrmNhanVien_Load(object sender, EventArgs e)
         {
+            LoadChucVu();
             LoadData();
-            SetPermissions();
-
-
+            BatTatChinhSua(false);
         }
 
-        private void SetPermissions()
+        private void LoadChucVu()
         {
-            // Phân quyền chuyên nghiệp
-            bool isAdmin = string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase);
-            btnXoa.Visible = isAdmin;
+            cboChucVu.Items.Clear();
+            
+            cboChucVu.Items.AddRange(new string[] { "Admin", "Ca Sáng", "Ca Chiều", "Ca Tối", "Nhân viên" });
+            cboChucVu.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboChucVu.SelectedIndex = 2; // Mặc định chọn Nhân viên
+        }
 
-            // Nếu không phải Admin thì chỉ cho xem, không cho sửa tài khoản/chức vụ
-            if (!isAdmin)
+        private void BatTatChinhSua(bool allows)
+        {
+            bool isAdmin = string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase);
+            bool isManager = string.Equals(role, "Quản lý", StringComparison.OrdinalIgnoreCase);
+
+            txtHoVaTen.Enabled = allows;
+            txtSoDienThoai.Enabled = allows;
+            txtMatKhau.Enabled = allows;
+
+            // SỬA TẠI ĐÂY: Cho phép nhập tài khoản khi nhấn Thêm HOẶC Sửa (allows = true)
+            txtTenDangNhap.Enabled = allows;
+
+            // Chức vụ: Chỉ Admin/Quản lý mới được đổi
+            cboChucVu.Enabled = allows && (isAdmin || isManager);
+
+            // ... các code nút bấm giữ nguyên ...
+            btnThem.Enabled = !allows;
+            btnSua.Enabled = !allows;
+            btnLuu.Enabled = allows;
+            btnHuyBo.Enabled = allows;
+        }
+
+        private void CapNhatTrangThaiTaiKhoan(bool allows)
+        {
+            string cv = cboChucVu.Text;
+            // Bất kỳ chức vụ nào KHÔNG PHẢI "Nhân viên" thì đều CÓ tài khoản
+            bool chucVuCoTaiKhoan = (cv != "Nhân viên");
+
+            // allows = true khi nhấn Thêm hoặc Sửa
+            txtTenDangNhap.Enabled = allows && chucVuCoTaiKhoan;
+            txtMatKhau.Enabled = allows && chucVuCoTaiKhoan;
+
+            if (!chucVuCoTaiKhoan)
             {
-                txtTenDangNhap.ReadOnly = true;
-                txtChucVu.Enabled = false;
-                lblThongBaoQuyen.Text = "Chế độ: Nhân viên (Hạn chế quyền)";
-                lblThongBaoQuyen.ForeColor = Color.OrangeRed;
+                txtTenDangNhap.Clear();
+                txtMatKhau.Clear();
+                txtTenDangNhap.BackColor = Color.LightGray;
+                txtMatKhau.BackColor = Color.LightGray;
             }
+            else
+            {
+                // Khi chọn Ca Sáng/Chiều/Tối, ô sẽ trắng ra nếu đang trong chế độ chỉnh sửa
+                txtTenDangNhap.BackColor = allows ? Color.White : Color.LightGray;
+                txtMatKhau.BackColor = allows ? Color.White : Color.LightGray;
+            }
+        }
+           
+        private void cboChucVu_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (btnLuu.Enabled) CapNhatTrangThaiTaiKhoan(true);
+
         }
         private void LoadData()
         {
-            // Sử dụng Select để không lấy những trường thừa, tăng tốc độ
-            dgvNhanVien.DataSource = db.NhanVien
-                .Select(nv => new
-                {
-                    nv.MaNV,
-                    nv.TenNV,
-                    nv.SoDienThoai,
-                    nv.TenDangNhap,
-                    nv.MatKhau, // Vẫn lấy để đổ vào Textbox nhưng ẩn trên lưới
-                    nv.ChucVu
-                })
-                .ToList();
+            try
+            {
+                db = new QLBidaDbContext(); // Làm tươi kết nối
+                var list = db.NhanVien
+                   // .Where(nv => nv.TrangThai == true)
+                    .Select(nv => new {
+                        nv.MaNV,
+                        nv.TenNV,
+                        nv.SoDienThoai,
+                        TinhTrang = nv.TrangThai == true ? "Đang làm" : "Đã nghỉ",
+                        nv.TenDangNhap,
+                        nv.MatKhau,
+                        nv.ChucVu
+                    }).ToList();
 
-            // Định dạng tiêu đề cột
+                dgvNhanVien.DataSource = list;
+
+                if (dgvNhanVien.Columns["MatKhau"] != null)
+                    dgvNhanVien.Columns["MatKhau"].Visible = false;
+
+                DinhDangLuoi();
+            }
+            catch (Exception ex) { MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message); }
+        
+    }
+          
+
+        private void DinhDangLuoi()
+        {
+            if (dgvNhanVien.Columns["MaNV"] == null) return;
             dgvNhanVien.Columns["MaNV"].HeaderText = "ID";
             dgvNhanVien.Columns["TenNV"].HeaderText = "Họ Tên";
             dgvNhanVien.Columns["SoDienThoai"].HeaderText = "SĐT";
             dgvNhanVien.Columns["TenDangNhap"].HeaderText = "Tài Khoản";
             dgvNhanVien.Columns["ChucVu"].HeaderText = "Chức Vụ";
-
-            // XỊN: Tuyệt đối không hiện cột mật khẩu trên lưới
-            if (dgvNhanVien.Columns["MatKhau"] != null)
-                dgvNhanVien.Columns["MatKhau"].Visible = false;
-
-            DinhDangLuoi();
-        }
-
-        private void DinhDangLuoi()
-        {
-            // Tô màu dòng được chọn cho chuyên nghiệp
+            dgvNhanVien.Columns["TinhTrang"].HeaderText = "Trạng Thái";
             dgvNhanVien.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvNhanVien.DefaultCellStyle.SelectionBackColor = Color.DeepSkyBlue;
-        }
-
-        private void ClearForm()
-        {
-            txtHoVaTen.Clear();
-            txtSoDienThoai.Clear();
-            txtTenDangNhap.Clear();
-            txtMatKhau.Clear();
-            txtChucVu.Clear();
-            maDangChon = null;
+            dgvNhanVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         private void btnThem_Click(object sender, EventArgs e)
-        {
+            {
+            dangThem = true;
+            maDangChon = null;
             ClearForm();
-            txtTenDangNhap.ReadOnly = false; // Mở khóa để nhập tài khoản mới
+            BatTatChinhSua(true);
             txtHoVaTen.Focus();
         }
-    
+
 
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
 
-            // Validate dữ liệu tập trung
-            if (!ValidateInput()) return;
+            if (string.IsNullOrWhiteSpace(txtHoVaTen.Text))
+            {
+                MessageBox.Show("Vui lòng nhập họ tên nhân viên!");
+                txtHoVaTen.Focus();
+                return;
+            }
 
             try
             {
-                if (maDangChon == null) // THÊM MỚI
+                using (var context = new QLBidaDbContext())
                 {
-                    // Check trùng tài khoản
-                    if (db.NhanVien.Any(x => x.TenDangNhap == txtTenDangNhap.Text.Trim()))
+                    bool canCoTaiKhoan = (cboChucVu.Text != "Nhân viên");
+                    string tenDN = txtTenDangNhap.Text.Trim();
+
+                    if (dangThem) // CHẾ ĐỘ THÊM MỚI
                     {
-                        MessageBox.Show("Tên đăng nhập này đã được sử dụng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        // Kiểm tra trùng tên đăng nhập
+                        if (canCoTaiKhoan && !string.IsNullOrEmpty(tenDN))
+                        {
+                            if (context.NhanVien.Any(x => x.TenDangNhap == tenDN))
+                            {
+                                MessageBox.Show("Tên đăng nhập này đã tồn tại!");
+                                return;
+                            }
+                        }
+
+                        NhanVien nvMoi = new NhanVien
+                        {
+                            TenNV = txtHoVaTen.Text.Trim(),
+                            SoDienThoai = txtSoDienThoai.Text.Trim(),
+                            ChucVu = cboChucVu.Text,
+                            TenDangNhap = canCoTaiKhoan ? (string.IsNullOrEmpty(tenDN) ? null : tenDN) : null,
+                            MatKhau = canCoTaiKhoan ? (string.IsNullOrEmpty(txtMatKhau.Text) ? "123" : txtMatKhau.Text) : null,
+                            TrangThai = true // QUAN TRỌNG: Nhân viên mới mặc định là đang làm việc
+                        };
+                        context.NhanVien.Add(nvMoi);
+                    }
+                    else // CHẾ ĐỘ SỬA
+                    {
+                        var nvSua = context.NhanVien.Find(maDangChon);
+                        if (nvSua != null)
+                        {
+                            nvSua.TenNV = txtHoVaTen.Text.Trim();
+                            nvSua.SoDienThoai = txtSoDienThoai.Text.Trim();
+                            nvSua.ChucVu = cboChucVu.Text;
+
+                           
+                            if (canCoTaiKhoan)
+                            {
+                                // Kiểm tra trùng: Tìm xem có ai khác (không phải người đang sửa) trùng tên đăng nhập không
+                                if (!string.IsNullOrEmpty(tenDN) && context.NhanVien.Any(x => x.TenDangNhap == tenDN && x.MaNV != (int)maDangChon))
+                                {
+                                    MessageBox.Show("Tên đăng nhập đã được người khác sử dụng!");
+                                    return;
+                                }
+                                nvSua.TenDangNhap = string.IsNullOrEmpty(tenDN) ? null : tenDN;
+                                if (!string.IsNullOrWhiteSpace(txtMatKhau.Text)) nvSua.MatKhau = txtMatKhau.Text;
+                            
+                        }
+                            else
+                            {
+                                nvSua.TenDangNhap = null;
+                                nvSua.MatKhau = null;
+                            }
+                           
+                        }
                     }
 
-                    NhanVien nv = new NhanVien()
-                    {
-                        TenNV = txtHoVaTen.Text.Trim(),
-                        SoDienThoai = txtSoDienThoai.Text.Trim(),
-                        TenDangNhap = txtTenDangNhap.Text.Trim(),
-                        MatKhau = txtMatKhau.Text.Trim(),
-                        ChucVu = txtChucVu.Text.Trim()
-                    };
-                    db.NhanVien.Add(nv);
-                    MessageBox.Show("Thêm nhân viên mới thành công!");
+                    context.SaveChanges();
+                    MessageBox.Show("Lưu thành công!");
+                    dangThem = false;
+                    BatTatChinhSua(false);
+                    LoadData();
+                    ClearForm();
                 }
-                else // CẬP NHẬT
-                {
-                    var nv = db.NhanVien.Find(maDangChon);
-                    if (nv != null)
-                    {
-                        nv.TenNV = txtHoVaTen.Text.Trim();
-                        nv.SoDienThoai = txtSoDienThoai.Text.Trim();
-                        nv.MatKhau = txtMatKhau.Text.Trim();
-                        if (role == "Admin") nv.ChucVu = txtChucVu.Text.Trim();
-
-                        MessageBox.Show("Cập nhật thông tin thành công!");
-                    }
-                }
-
-                db.SaveChanges();
-                LoadData();
-                ClearForm();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Có lỗi xảy ra: " + ex.Message);
+                string msg = ex.InnerException?.InnerException?.Message ?? ex.Message;
+                MessageBox.Show("Lỗi: " + msg);
             }
-        }
-        private bool ValidateInput()
-        {
-            if (string.IsNullOrWhiteSpace(txtHoVaTen.Text) || string.IsNullOrWhiteSpace(txtTenDangNhap.Text) || string.IsNullOrWhiteSpace(txtMatKhau.Text))
-            {
-                MessageBox.Show("Vui lòng không để trống các trường bắt buộc!", "Thông báo");
-                return false;
             }
 
-            // Regex kiểm tra SĐT (Xịn hơn check length thông thường)
-            if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^[0-9]{9,11}$"))
-            {
-                MessageBox.Show("Số điện thoại không hợp lệ (9-11 chữ số)!");
-                return false;
-            }
-            return true;
-        }
 
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (maDangChon == null) return;
-
-            // XỊN: Chỉ Admin mới có quyền xóa và phải nhập xác nhận
-            var nv = db.NhanVien.Find(maDangChon);
-            if (nv == null) return;
-
-            if (nv.TenDangNhap.ToLower() == "admin")
+            if (maDangChon == null)
             {
-                MessageBox.Show("Không thể xóa tài khoản Admin hệ thống!");
+                MessageBox.Show("Vui lòng chọn nhân viên cần xóa!");
                 return;
             }
 
-            if (MessageBox.Show($"Bạn có chắc muốn xóa nhân viên {nv.TenNV}?", "Xác nhận xóa",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            try
             {
-                db.NhanVien.Remove(nv);
-                db.SaveChanges();
-                LoadData();
-                ClearForm();
-                MessageBox.Show("Đã xóa nhân viên.");
+                using (var context = new QLBidaDbContext())
+                {
+                    var nv = context.NhanVien.Find(maDangChon);
+                    if (nv == null) return;
+
+                    // Vẫn chặn xóa Admin cho an toàn
+                    if (nv.ChucVu == "Admin")
+                    {
+                        MessageBox.Show("Không thể xóa tài khoản Admin!");
+                        return;
+                    }
+
+                    var result = MessageBox.Show($"Bạn có chắc muốn xóa nhân viên {nv.TenNV}?\n(Dữ liệu lịch sử của nhân viên này vẫn sẽ được giữ lại)",
+                                                 "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        // THAY THẾ LỆNH REMOVE BẰNG LỆNH DƯỚI ĐÂY:
+                        nv.TrangThai = false;
+
+                        context.SaveChanges();
+
+                        MessageBox.Show("Đã xóa nhân viên thành công!");
+                        maDangChon = null;
+                        ClearForm();
+                        LoadData(); // Load lại sẽ mất tên nhân viên đó khỏi bảng
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi xóa: " + ex.Message);
+            
             }
         }
 
         private void btnHuyBo_Click(object sender, EventArgs e)
         {
-            ClearForm();
+            dangThem = false;
+            BatTatChinhSua(false);
             LoadData();
+            ClearForm();
+
+        }
+
+        private void ClearForm()
+        {
+            txtMaNV.Clear();
+            txtHoVaTen.Clear();
+            txtSoDienThoai.Clear();
+            txtTenDangNhap.Clear();
+            txtMatKhau.Clear();
+            // Tìm và chọn đúng chữ "Nhân viên" thay vì dùng số Index
+            cboChucVu.Text = "Nhân viên";
         }
 
         private void dgvNhanVien_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0 || btnLuu.Enabled) return;
 
             var row = dgvNhanVien.Rows[e.RowIndex];
+
+            // 2. Kiểm tra ID có tồn tại không
+            if (row.Cells["MaNV"].Value == null || row.Cells["MaNV"].Value == DBNull.Value) return;
+
             maDangChon = Convert.ToInt32(row.Cells["MaNV"].Value);
+            txtMaNV.Text = maDangChon.ToString();
 
-            txtHoVaTen.Text = row.Cells["TenNV"].Value?.ToString();
-            txtSoDienThoai.Text = row.Cells["SoDienThoai"].Value?.ToString();
-            txtTenDangNhap.Text = row.Cells["TenDangNhap"].Value?.ToString();
-            txtMatKhau.Text = row.Cells["MatKhau"].Value?.ToString();
-            txtChucVu.Text = row.Cells["ChucVu"].Value?.ToString();
+            // 3. Đọc dữ liệu cực kỳ an toàn bằng toán tử ?. và ?? ""
+            // Nếu dữ liệu trong DB là Null, nó sẽ hiện ô trắng thay vì văng lỗi đỏ
+            txtHoVaTen.Text = row.Cells["TenNV"].Value?.ToString() ?? "";
+            txtSoDienThoai.Text = row.Cells["SoDienThoai"].Value?.ToString() ?? "";
+            txtTenDangNhap.Text = row.Cells["TenDangNhap"].Value?.ToString() ?? "";
+            txtMatKhau.Text = row.Cells["MatKhau"].Value?.ToString() ?? "";
+            cboChucVu.Text = row.Cells["ChucVu"].Value?.ToString() ?? "Nhân viên";
 
-            // Khi chọn để sửa, khóa ô tài khoản lại (thường tài khoản không cho đổi)
-            txtTenDangNhap.ReadOnly = true;
+            CapNhatTrangThaiTaiKhoan(false);
+
         }
 
-       
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            if (maDangChon == null)
+            {
+                MessageBox.Show("Vui lòng chọn nhân viên muốn sửa!");
+                return;
+            }
+            dangThem = false;
+            BatTatChinhSua(true); // Mở khóa các textbox
+            CapNhatTrangThaiTaiKhoan(true);
+        }
+
+        private void txtSoDienThoai_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+                e.Handled = true;
+
+
+        }
+        }
     }
-}
+
