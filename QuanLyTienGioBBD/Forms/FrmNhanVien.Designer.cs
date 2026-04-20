@@ -55,39 +55,45 @@
             // 
             // btnXoa
             // 
-            btnXoa.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnXoa.ForeColor = Color.Brown;
-            btnXoa.Location = new Point(534, 70);
+            btnXoa.BackColor = Color.DeepPink;
+            btnXoa.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnXoa.ForeColor = Color.Black;
+            btnXoa.Location = new Point(675, 32);
             btnXoa.Margin = new Padding(2);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(87, 27);
+            btnXoa.Size = new Size(95, 42);
             btnXoa.TabIndex = 2;
             btnXoa.Text = "❌Xóa";
-            btnXoa.UseVisualStyleBackColor = true;
+            btnXoa.UseVisualStyleBackColor = false;
             // 
             // btnHuyBo
             // 
-            btnHuyBo.Location = new Point(652, 70);
+            btnHuyBo.BackColor = Color.DeepPink;
+            btnHuyBo.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnHuyBo.Location = new Point(745, 95);
             btnHuyBo.Margin = new Padding(2);
             btnHuyBo.Name = "btnHuyBo";
-            btnHuyBo.Size = new Size(70, 27);
+            btnHuyBo.Size = new Size(113, 31);
             btnHuyBo.TabIndex = 2;
             btnHuyBo.Text = "🚫Hủy bỏ";
-            btnHuyBo.UseVisualStyleBackColor = true;
+            btnHuyBo.UseVisualStyleBackColor = false;
             // 
             // btnLuu
             // 
-            btnLuu.Location = new Point(652, 32);
+            btnLuu.BackColor = Color.DeepPink;
+            btnLuu.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnLuu.Location = new Point(800, 32);
             btnLuu.Margin = new Padding(2);
             btnLuu.Name = "btnLuu";
-            btnLuu.Size = new Size(70, 27);
+            btnLuu.Size = new Size(86, 42);
             btnLuu.TabIndex = 2;
             btnLuu.Text = "💾Lưu";
-            btnLuu.UseVisualStyleBackColor = true;
+            btnLuu.UseVisualStyleBackColor = false;
             btnLuu.Click += btnLuu_Click;
             // 
             // groupBox1
             // 
+            groupBox1.BackColor = SystemColors.ButtonHighlight;
             groupBox1.Controls.Add(btnSua);
             groupBox1.Controls.Add(cboChucVu);
             groupBox1.Controls.Add(lblMaNV);
@@ -116,12 +122,14 @@
             // 
             // btnSua
             // 
-            btnSua.Location = new Point(596, 103);
+            btnSua.BackColor = Color.DeepPink;
+            btnSua.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnSua.Location = new Point(596, 95);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(68, 29);
+            btnSua.Size = new Size(95, 37);
             btnSua.TabIndex = 11;
             btnSua.Text = "Sửa";
-            btnSua.UseVisualStyleBackColor = true;
+            btnSua.UseVisualStyleBackColor = false;
             btnSua.Click += btnSua_Click;
             // 
             // cboChucVu
@@ -151,13 +159,15 @@
             // 
             // btnThem
             // 
+            btnThem.BackColor = Color.DeepPink;
+            btnThem.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btnThem.Location = new Point(534, 32);
             btnThem.Margin = new Padding(2);
             btnThem.Name = "btnThem";
-            btnThem.Size = new Size(87, 27);
+            btnThem.Size = new Size(109, 42);
             btnThem.TabIndex = 2;
             btnThem.Text = "➕Thêm";
-            btnThem.UseVisualStyleBackColor = true;
+            btnThem.UseVisualStyleBackColor = false;
             btnThem.Click += btnThem_Click;
             // 
             // txtMatKhau
@@ -276,6 +286,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Thistle;
             ClientSize = new Size(965, 653);
             Controls.Add(groupBox1);
             Controls.Add(groupBox2);

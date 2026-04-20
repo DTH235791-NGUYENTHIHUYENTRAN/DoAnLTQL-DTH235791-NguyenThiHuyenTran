@@ -40,9 +40,10 @@
             // lblBan
             // 
             lblBan.AutoSize = true;
-            lblBan.Location = new Point(66, 9);
+            lblBan.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lblBan.Location = new Point(175, 9);
             lblBan.Name = "lblBan";
-            lblBan.Size = new Size(41, 20);
+            lblBan.Size = new Size(67, 25);
             lblBan.TabIndex = 0;
             lblBan.Text = "Bàn: ";
             // 
@@ -60,52 +61,59 @@
             cboNhanVien.FormattingEnabled = true;
             cboNhanVien.Location = new Point(66, 160);
             cboNhanVien.Name = "cboNhanVien";
-            cboNhanVien.Size = new Size(151, 28);
+            cboNhanVien.Size = new Size(250, 28);
             cboNhanVien.TabIndex = 2;
             // 
             // lblGiobd
             // 
             lblGiobd.AutoSize = true;
+            lblGiobd.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             lblGiobd.Location = new Point(66, 45);
             lblGiobd.Name = "lblGiobd";
-            lblGiobd.Size = new Size(92, 20);
+            lblGiobd.Size = new Size(123, 23);
             lblGiobd.TabIndex = 3;
             lblGiobd.Text = "Giờ Bắt Đầu:";
             // 
             // lblnv
             // 
             lblnv.AutoSize = true;
+            lblnv.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             lblnv.Location = new Point(70, 124);
             lblnv.Name = "lblnv";
-            lblnv.Size = new Size(80, 20);
+            lblnv.Size = new Size(103, 23);
             lblnv.TabIndex = 4;
             lblnv.Text = "Nhân Viên:";
             // 
             // btnBatDau
             // 
+            btnBatDau.BackColor = Color.HotPink;
+            btnBatDau.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btnBatDau.Location = new Point(66, 210);
             btnBatDau.Name = "btnBatDau";
-            btnBatDau.Size = new Size(94, 29);
+            btnBatDau.Size = new Size(107, 38);
             btnBatDau.TabIndex = 5;
             btnBatDau.Text = "Bắt Đầu";
-            btnBatDau.UseVisualStyleBackColor = true;
+            btnBatDau.UseVisualStyleBackColor = false;
             btnBatDau.Click += btnBatDau_Click;
             // 
             // btnHuy
             // 
+            btnHuy.BackColor = Color.HotPink;
+            btnHuy.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btnHuy.Location = new Point(203, 209);
             btnHuy.Name = "btnHuy";
-            btnHuy.Size = new Size(94, 29);
+            btnHuy.Size = new Size(113, 39);
             btnHuy.TabIndex = 6;
             btnHuy.Text = "Hủy";
-            btnHuy.UseVisualStyleBackColor = true;
+            btnHuy.UseVisualStyleBackColor = false;
             btnHuy.Click += btnHuy_Click;
             // 
             // FrmBatDauChoi
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(450, 324);
+            BackColor = Color.LavenderBlush;
+            ClientSize = new Size(443, 323);
             Controls.Add(btnHuy);
             Controls.Add(btnBatDau);
             Controls.Add(lblnv);

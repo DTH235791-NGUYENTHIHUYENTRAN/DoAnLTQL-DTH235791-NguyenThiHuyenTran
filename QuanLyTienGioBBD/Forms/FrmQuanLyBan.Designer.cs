@@ -52,14 +52,15 @@
             // flowLayoutPanelThuong
             // 
             flowLayoutPanelThuong.Dock = DockStyle.Fill;
-            flowLayoutPanelThuong.Location = new Point(3, 23);
+            flowLayoutPanelThuong.Location = new Point(3, 26);
             flowLayoutPanelThuong.Name = "flowLayoutPanelThuong";
-            flowLayoutPanelThuong.Size = new Size(726, 250);
+            flowLayoutPanelThuong.Size = new Size(726, 247);
             flowLayoutPanelThuong.TabIndex = 1;
             // 
             // groupBoxThuong
             // 
             groupBoxThuong.Controls.Add(flowLayoutPanelThuong);
+            groupBoxThuong.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             groupBoxThuong.Location = new Point(29, 21);
             groupBoxThuong.Name = "groupBoxThuong";
             groupBoxThuong.Size = new Size(732, 276);
@@ -69,15 +70,17 @@
             // 
             // groupBoxThongTin
             // 
+            groupBoxThongTin.BackColor = Color.Pink;
             groupBoxThongTin.Controls.Add(lblLoaiBan);
             groupBoxThongTin.Controls.Add(cboLoaiBan);
             groupBoxThongTin.Controls.Add(cboTrangThai);
             groupBoxThongTin.Controls.Add(txtTenBan);
             groupBoxThongTin.Controls.Add(label3);
             groupBoxThongTin.Controls.Add(lblTenban);
-            groupBoxThongTin.Location = new Point(32, 303);
+            groupBoxThongTin.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            groupBoxThongTin.Location = new Point(25, 335);
             groupBoxThongTin.Name = "groupBoxThongTin";
-            groupBoxThongTin.Size = new Size(733, 148);
+            groupBoxThongTin.Size = new Size(733, 219);
             groupBoxThongTin.TabIndex = 4;
             groupBoxThongTin.TabStop = false;
             groupBoxThongTin.Text = "Thông Tin Bàn";
@@ -85,121 +88,135 @@
             // lblLoaiBan
             // 
             lblLoaiBan.AutoSize = true;
-            lblLoaiBan.Location = new Point(281, 35);
+            lblLoaiBan.Location = new Point(377, 90);
             lblLoaiBan.Name = "lblLoaiBan";
-            lblLoaiBan.Size = new Size(69, 20);
+            lblLoaiBan.Size = new Size(93, 23);
             lblLoaiBan.TabIndex = 7;
             lblLoaiBan.Text = "Loại Bàn:";
             // 
             // cboLoaiBan
             // 
             cboLoaiBan.FormattingEnabled = true;
-            cboLoaiBan.Location = new Point(370, 26);
+            cboLoaiBan.Location = new Point(486, 82);
             cboLoaiBan.Name = "cboLoaiBan";
-            cboLoaiBan.Size = new Size(151, 28);
+            cboLoaiBan.Size = new Size(151, 31);
             cboLoaiBan.TabIndex = 6;
             // 
             // cboTrangThai
             // 
             cboTrangThai.FormattingEnabled = true;
-            cboTrangThai.Location = new Point(96, 87);
+            cboTrangThai.Location = new Point(145, 125);
             cboTrangThai.Name = "cboTrangThai";
-            cboTrangThai.Size = new Size(151, 28);
+            cboTrangThai.Size = new Size(176, 31);
             cboTrangThai.TabIndex = 5;
             // 
             // txtTenBan
             // 
-            txtTenBan.Location = new Point(96, 35);
+            txtTenBan.Location = new Point(145, 56);
             txtTenBan.Name = "txtTenBan";
-            txtTenBan.Size = new Size(155, 27);
+            txtTenBan.Size = new Size(176, 30);
             txtTenBan.TabIndex = 4;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 86);
+            label3.Location = new Point(15, 125);
             label3.Name = "label3";
-            label3.Size = new Size(81, 20);
+            label3.Size = new Size(110, 23);
             label3.TabIndex = 2;
             label3.Text = "Trạng Thái:";
             // 
             // lblTenban
             // 
             lblTenban.AutoSize = true;
-            lblTenban.Location = new Point(15, 35);
+            lblTenban.Location = new Point(15, 59);
             lblTenban.Name = "lblTenban";
-            lblTenban.Size = new Size(64, 20);
+            lblTenban.Size = new Size(87, 23);
             lblTenban.TabIndex = 1;
             lblTenban.Text = "Tên Bàn:";
             // 
             // btnThem
             // 
-            btnThem.Location = new Point(791, 44);
+            btnThem.BackColor = Color.DeepPink;
+            btnThem.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnThem.Location = new Point(25, 601);
             btnThem.Name = "btnThem";
-            btnThem.Size = new Size(94, 29);
+            btnThem.Size = new Size(104, 36);
             btnThem.TabIndex = 5;
             btnThem.Text = "Thêm";
-            btnThem.UseVisualStyleBackColor = true;
+            btnThem.UseVisualStyleBackColor = false;
             btnThem.Click += btnThem_Click;
             // 
             // btnSua
             // 
-            btnSua.Location = new Point(791, 106);
+            btnSua.BackColor = Color.DeepPink;
+            btnSua.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnSua.Location = new Point(170, 601);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(94, 29);
+            btnSua.Size = new Size(104, 35);
             btnSua.TabIndex = 6;
             btnSua.Text = "Sửa";
-            btnSua.UseVisualStyleBackColor = true;
+            btnSua.UseVisualStyleBackColor = false;
             btnSua.Click += btnSua_Click;
             // 
             // btnXoa
             // 
-            btnXoa.Location = new Point(791, 173);
+            btnXoa.BackColor = Color.DeepPink;
+            btnXoa.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnXoa.Location = new Point(317, 601);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(94, 29);
+            btnXoa.Size = new Size(104, 35);
             btnXoa.TabIndex = 7;
             btnXoa.Text = "Xóa";
-            btnXoa.UseVisualStyleBackColor = true;
+            btnXoa.UseVisualStyleBackColor = false;
             btnXoa.Click += btnXoa_Click;
             // 
             // btnBatDau
             // 
-            btnBatDau.Location = new Point(791, 241);
+            btnBatDau.BackColor = Color.DeepPink;
+            btnBatDau.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnBatDau.Location = new Point(232, 661);
             btnBatDau.Name = "btnBatDau";
-            btnBatDau.Size = new Size(94, 29);
+            btnBatDau.Size = new Size(104, 40);
             btnBatDau.TabIndex = 8;
             btnBatDau.Text = "Bắt Đầu";
-            btnBatDau.UseVisualStyleBackColor = true;
+            btnBatDau.UseVisualStyleBackColor = false;
             btnBatDau.Click += btnBatDau_Click;
             // 
             // btnThanhToan
             // 
-            btnThanhToan.Location = new Point(791, 312);
+            btnThanhToan.BackColor = Color.DeepPink;
+            btnThanhToan.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnThanhToan.Location = new Point(414, 664);
             btnThanhToan.Name = "btnThanhToan";
-            btnThanhToan.Size = new Size(94, 29);
+            btnThanhToan.Size = new Size(127, 37);
             btnThanhToan.TabIndex = 9;
             btnThanhToan.Text = "Thanh Toán";
-            btnThanhToan.UseVisualStyleBackColor = true;
+            btnThanhToan.UseVisualStyleBackColor = false;
             btnThanhToan.Click += btnThanhToan_Click;
             // 
             // btnHuyBo
             // 
-            btnHuyBo.Location = new Point(791, 389);
+            btnHuyBo.BackColor = Color.DeepPink;
+            btnHuyBo.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnHuyBo.Location = new Point(682, 593);
             btnHuyBo.Name = "btnHuyBo";
-            btnHuyBo.Size = new Size(94, 29);
+            btnHuyBo.Size = new Size(115, 43);
             btnHuyBo.TabIndex = 10;
             btnHuyBo.Text = "Hủy Bỏ";
-            btnHuyBo.UseVisualStyleBackColor = true;
+            btnHuyBo.UseVisualStyleBackColor = false;
             btnHuyBo.Click += btnHuyBo_Click;
             // 
             // btnChuyenBan
             // 
-            btnChuyenBan.Location = new Point(791, 454);
+            btnChuyenBan.BackColor = Color.DeepPink;
+            btnChuyenBan.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnChuyenBan.Location = new Point(491, 597);
             btnChuyenBan.Name = "btnChuyenBan";
-            btnChuyenBan.Size = new Size(94, 29);
+            btnChuyenBan.Size = new Size(127, 39);
             btnChuyenBan.TabIndex = 11;
             btnChuyenBan.Text = "Chuyển Bàn";
-            btnChuyenBan.UseVisualStyleBackColor = true;
+            btnChuyenBan.UseVisualStyleBackColor = false;
             btnChuyenBan.Click += btnChuyenBan_Click;
             // 
             // button1
@@ -215,7 +232,8 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(909, 575);
+            BackColor = SystemColors.ButtonFace;
+            ClientSize = new Size(809, 738);
             Controls.Add(button1);
             Controls.Add(btnChuyenBan);
             Controls.Add(btnHuyBo);

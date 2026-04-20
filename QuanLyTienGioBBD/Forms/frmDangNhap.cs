@@ -37,9 +37,7 @@ namespace QuanLyTienGioBBD.Forms
             {
                 using (QLBidaDbContext db = new QLBidaDbContext())
                 {
-                    // THAY ĐỔI TẠI ĐÂY: 
-                    // 1. Kiểm tra TrangThai == true (Chỉ cho người đang làm đăng nhập)
-                    // 2. Thêm kiểm tra null cho TenDangNhap để tránh lỗi hệ thống
+                   
                     var nhanVien = db.NhanVien
                                      .FirstOrDefault(x => x.TrangThai == true &&
                                                          x.TenDangNhap != null &&
@@ -47,7 +45,7 @@ namespace QuanLyTienGioBBD.Forms
 
                     if (nhanVien != null)
                     {
-                        // Kiểm tra mật khẩu (Sử dụng Equals để an toàn hơn Trim)
+                       
                         if (nhanVien.MatKhau != null && nhanVien.MatKhau.Trim() == password)
                         {
                             MessageBox.Show($"Chào mừng {nhanVien.TenNV} trở lại!");
@@ -62,7 +60,7 @@ namespace QuanLyTienGioBBD.Forms
                     }
                     else
                     {
-                        // Nếu không tìm thấy, có thể là sai tên DN hoặc tài khoản đã bị "Xóa" (TrangThai = false)
+                       
                         MessageBox.Show("Tài khoản không tồn tại hoặc đã bị khóa!");
                     }
                 }

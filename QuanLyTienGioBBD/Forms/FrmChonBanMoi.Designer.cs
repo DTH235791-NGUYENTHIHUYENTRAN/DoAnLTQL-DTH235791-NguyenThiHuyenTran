@@ -54,29 +54,32 @@
             // 
             // btnXacNhan
             // 
-            btnXacNhan.Location = new Point(76, 136);
+            btnXacNhan.BackColor = Color.LightSlateGray;
+            btnXacNhan.Location = new Point(76, 141);
             btnXacNhan.Name = "btnXacNhan";
-            btnXacNhan.Size = new Size(115, 49);
+            btnXacNhan.Size = new Size(115, 44);
             btnXacNhan.TabIndex = 2;
             btnXacNhan.Text = "Xác Nhận";
-            btnXacNhan.UseVisualStyleBackColor = true;
+            btnXacNhan.UseVisualStyleBackColor = false;
             btnXacNhan.Click += btnXacNhan_Click;
             // 
             // btnHuyBo
             // 
+            btnHuyBo.BackColor = Color.SlateGray;
             btnHuyBo.Location = new Point(207, 141);
             btnHuyBo.Name = "btnHuyBo";
             btnHuyBo.Size = new Size(123, 44);
             btnHuyBo.TabIndex = 3;
             btnHuyBo.Text = "Hủy Bỏ";
-            btnHuyBo.UseVisualStyleBackColor = true;
+            btnHuyBo.UseVisualStyleBackColor = false;
             btnHuyBo.Click += btnHuyBo_Click;
             // 
             // FrmChonBanMoi
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(440, 234);
+            BackColor = Color.Gainsboro;
+            ClientSize = new Size(450, 237);
             Controls.Add(btnHuyBo);
             Controls.Add(btnXacNhan);
             Controls.Add(cboBanTrong);

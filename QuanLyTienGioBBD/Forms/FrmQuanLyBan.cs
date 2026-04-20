@@ -38,7 +38,7 @@ namespace QuanLyTienGioBBD.Forms
 
         public void LoadBan()
         {
-            db = new QLBidaDbContext(); // Refresh DB
+            db = new QLBidaDbContext(); 
             flowLayoutPanelThuong.Controls.Clear();
             var dsBan = db.Ban.ToList();
 
@@ -63,8 +63,6 @@ namespace QuanLyTienGioBBD.Forms
 
             }
         }
-
-
 
         private bool XacNhanAdmin()
         {
@@ -220,16 +218,15 @@ namespace QuanLyTienGioBBD.Forms
                         int idMoi = f.MaBanDuocChon;
                         DateTime bayGio = DateTime.Now;
 
-                        // --- LOGIC TÍNH TIỀN CHẶNG VỪA KẾT THÚC ---
+                       
                         double soPhutChặngCu = (bayGio - hd.GioBatDau).TotalMinutes;
                         if (soPhutChặngCu < 0) soPhutChặngCu = 0;
 
-                        // Xác định đơn giá bàn cũ (VIP: 100k, Thường: 80k)
+                        
                         decimal giaBanCu = (banDangChon.LoaiBan.ToUpper() == "VIP") ? 100000m : 80000m;
                         decimal tienChặngCu = (decimal)(soPhutChặngCu / 60) * giaBanCu;
 
-                        // --- LƯU LỊCH SỬ CHI TIẾT VÀO GHI CHÚ ---
-                        // Định dạng: Tên bàn (Giờ vào-Giờ ra) [Giá/h] = Số tiền
+                       
                         string lichSuMoi = $"{banDangChon.TenBan} ({hd.GioBatDau:HH:mm}-{bayGio:HH:mm}) [{giaBanCu:N0}đ/h] = {tienChặngCu:N0} VND";
 
                         if (string.IsNullOrEmpty(hd.GhiChu))
@@ -240,7 +237,7 @@ namespace QuanLyTienGioBBD.Forms
                         // --- CẬP NHẬT HÓA ĐƠN SANG BÀN MỚI ---
                         hd.TienDaTichLuy = (hd.TienDaTichLuy ?? 0) + tienChặngCu;
                         hd.BanBidaID = idMoi;
-                        hd.GioBatDau = bayGio; // Giờ bắt đầu tại bàn mới tính từ lúc này
+                        hd.GioBatDau = bayGio; 
 
                         // --- CẬP NHẬT TRẠNG THÁI BÀN ---
                         var banCu = db.Ban.Find(banDangChon.MaBan);
@@ -248,10 +245,10 @@ namespace QuanLyTienGioBBD.Forms
                         if (banCu != null) banCu.TrangThai = "Trống";
                         if (banMoi != null) banMoi.TrangThai = "Đang chơi";
 
-                        db.SaveChanges(); // Lưu tất cả thay đổi vào Database
+                        db.SaveChanges(); 
 
                         MessageBox.Show($"Chuyển từ {banCu.TenBan} sang {banMoi.TenBan} thành công!", "Thông báo");
-                        LoadBan(); // Tải lại sơ đồ bàn trên giao diện
+                        LoadBan(); 
                         banDangChon = null;
                     }
                     catch (Exception ex)

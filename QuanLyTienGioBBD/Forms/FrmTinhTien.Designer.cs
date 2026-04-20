@@ -178,10 +178,12 @@
             // 
             // groupBox1
             // 
+            groupBox1.BackColor = Color.Ivory;
             groupBox1.Controls.Add(lblBatDau);
             groupBox1.Controls.Add(lblKetThuc);
             groupBox1.Controls.Add(lblThoiGian);
             groupBox1.Controls.Add(lblGiaBan);
+            groupBox1.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             groupBox1.Location = new Point(434, 12);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(484, 236);
@@ -193,7 +195,7 @@
             // 
             txtTienKhach.Location = new Point(6, 53);
             txtTienKhach.Name = "txtTienKhach";
-            txtTienKhach.Size = new Size(167, 27);
+            txtTienKhach.Size = new Size(167, 30);
             txtTienKhach.TabIndex = 9;
             txtTienKhach.TextChanged += txtTienKhach_TextChanged;
             // 
@@ -229,12 +231,14 @@
             // 
             // groupBox2
             // 
+            groupBox2.BackColor = Color.Snow;
             groupBox2.Controls.Add(lblBan);
             groupBox2.Controls.Add(lblUuDai);
             groupBox2.Controls.Add(txtSDT);
             groupBox2.Controls.Add(lblTenKH);
             groupBox2.Controls.Add(lblDiem);
             groupBox2.Controls.Add(lblLoaiKH);
+            groupBox2.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             groupBox2.Location = new Point(12, 12);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(416, 236);
@@ -267,7 +271,7 @@
             txtSDT.Location = new Point(6, 39);
             txtSDT.Name = "txtSDT";
             txtSDT.PlaceholderText = "Nhập SĐT (nếu có hội viên)";
-            txtSDT.Size = new Size(205, 27);
+            txtSDT.Size = new Size(205, 30);
             txtSDT.TabIndex = 14;
             txtSDT.TextChanged += txtSDT_TextChanged;
             // 
@@ -283,9 +287,11 @@
             // 
             // groupBox3
             // 
+            groupBox3.BackColor = Color.AliceBlue;
             groupBox3.Controls.Add(lblTienBanHienTai);
             groupBox3.Controls.Add(lblGhiChuBanCu);
             groupBox3.Controls.Add(lblTienBanCu);
+            groupBox3.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             groupBox3.Location = new Point(12, 267);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(491, 237);
@@ -325,22 +331,26 @@
             // 
             // groupBox4
             // 
+            groupBox4.BackColor = SystemColors.ButtonHighlight;
             groupBox4.Controls.Add(lblTienGoc);
             groupBox4.Controls.Add(lblGiamGia);
             groupBox4.Controls.Add(lblTongTien);
-            groupBox4.Location = new Point(550, 280);
+            groupBox4.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            groupBox4.Location = new Point(550, 267);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(368, 224);
+            groupBox4.Size = new Size(368, 237);
             groupBox4.TabIndex = 76;
             groupBox4.TabStop = false;
             groupBox4.Text = "Tổng Tiền";
             // 
             // groupBox5
             // 
+            groupBox5.BackColor = SystemColors.ControlLightLight;
             groupBox5.Controls.Add(txtTienKhach);
             groupBox5.Controls.Add(lblTienThua);
             groupBox5.Controls.Add(picQR);
             groupBox5.Controls.Add(cboThanhToan);
+            groupBox5.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             groupBox5.Location = new Point(18, 527);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(443, 234);
@@ -352,6 +362,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveBorder;
             ClientSize = new Size(962, 798);
             Controls.Add(groupBox5);
             Controls.Add(groupBox4);

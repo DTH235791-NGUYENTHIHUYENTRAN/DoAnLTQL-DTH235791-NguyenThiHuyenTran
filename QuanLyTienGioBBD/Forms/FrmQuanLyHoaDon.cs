@@ -22,7 +22,7 @@ namespace QuanLyTienGioBBD.Forms
 
         void LoadComboBan()
         {
-            // Lấy danh sách từ bảng Ban (Dựa trên lỗi cũ của bạn là db.Ban)
+          
             var listBan = db.Ban.Select(x => new { x.MaBan, x.TenBan }).ToList();
             listBan.Insert(0, new { MaBan = 0, TenBan = "--- Tất cả bàn ---" });
 
@@ -33,7 +33,7 @@ namespace QuanLyTienGioBBD.Forms
 
         void LoadLichSu()
         {
-            db = new QLBidaDbContext(); // Làm mới dữ liệu
+            db = new QLBidaDbContext(); 
 
             var tuNgay = dtpTuNgay.Value.Date;
             var denNgay = dtpDenNgay.Value.Date.AddDays(1);
@@ -42,16 +42,13 @@ namespace QuanLyTienGioBBD.Forms
 
             var query = db.HoaDon.AsQueryable();
 
-            // 1. Lọc theo thời gian
+          
             query = query.Where(x => x.GioKetThuc >= tuNgay && x.GioKetThuc < denNgay);
-
-            // 2. Lọc theo Bàn (Dùng BanBidaID theo model HoaDon của bạn)
+          
             if (maBanHienTai > 0)
             {
                 query = query.Where(x => x.BanBidaID == maBanHienTai);
-            }
-
-            // 3. Tìm kiếm theo Mã, Tên KH hoặc SĐT
+            }           
             if (!string.IsNullOrEmpty(key))
             {
                 query = query.Where(x => x.MaHD.ToString() == key ||
@@ -59,14 +56,14 @@ namespace QuanLyTienGioBBD.Forms
                                          (x.KhachHang != null && x.KhachHang.DienThoai.Contains(key)));
             }
 
-            // 4. Đổ dữ liệu ra anonymous object (Khớp chuẩn TenNV)
+           
             var dataResult = query.Select(x => new
             {
                 MaHD = x.MaHD,
                 TenBan = x.BanBida.TenBan,
                 KhachHang = x.KhachHang != null ? x.KhachHang.TenKH : "Khách lẻ",
                 SDT = x.KhachHang != null ? x.KhachHang.DienThoai : "",
-                // Đã sửa thành TenNV theo model NhanVien bạn gửi
+                
                 NhanVien = x.NhanVien != null ? x.NhanVien.TenNV : "Admin",
                 Vao = x.GioBatDau,
                 Ra = x.GioKetThuc,
@@ -95,7 +92,7 @@ namespace QuanLyTienGioBBD.Forms
         }
         private void FrmQuanLyHoaDon_Load(object sender, EventArgs e)
         {
-            // Thiết lập ngày mặc định
+           
             dtpTuNgay.Value = DateTime.Now.Date;
             dtpDenNgay.Value = DateTime.Now.Date;
 
@@ -145,7 +142,7 @@ namespace QuanLyTienGioBBD.Forms
 
         private void btnXuat_Click(object sender, EventArgs e)
         {
-            // 1. Thiết lập lưu file
+           
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Title = "Xuất hóa đơn ra tập tin Excel";
             sfd.Filter = "Excel Workbook|*.xlsx";
@@ -155,7 +152,7 @@ namespace QuanLyTienGioBBD.Forms
             {
                 try
                 {
-                    // 2. Tạo DataTable để chứa dữ liệu
+                    
                     DataTable table = new DataTable();
                     table.Columns.Add("Mã HD", typeof(int));
                     table.Columns.Add("Tên Bàn", typeof(string));
@@ -165,7 +162,7 @@ namespace QuanLyTienGioBBD.Forms
                     table.Columns.Add("Giờ Ra", typeof(DateTime));
                     table.Columns.Add("Thành Tiền", typeof(decimal));
 
-                    // 3. Lấy dữ liệu từ Database (Sử dụng các bộ lọc hiện tại trên Form)
+                    
                     var tuNgay = dtpTuNgay.Value.Date;
                     var denNgay = dtpDenNgay.Value.Date.AddDays(1);
                     int maBanHienTai = (cboBan.SelectedValue != null) ? (int)cboBan.SelectedValue : 0;
@@ -177,7 +174,7 @@ namespace QuanLyTienGioBBD.Forms
 
                     var danhSachHoaDon = query.ToList();
 
-                    // 4. Đổ dữ liệu vào DataTable
+                    
                     if (danhSachHoaDon != null)
                     {
                         foreach (var h in danhSachHoaDon)
@@ -194,18 +191,14 @@ namespace QuanLyTienGioBBD.Forms
                         }
                     }
 
-                    // 5. Sử dụng ClosedXML (XLWorkbook) để tạo file Excel
+                    
                     using (ClosedXML.Excel.XLWorkbook wb = new ClosedXML.Excel.XLWorkbook())
                     {
                         var sheet = wb.Worksheets.Add(table, "Doanh Thu");
 
                         // Định dạng cột tiền có dấu phẩy phân cách
-                        sheet.Column(7).Style.NumberFormat.Format = "#,##0";
-
-                        // Tự động căn chỉnh độ rộng cột
-                        sheet.Columns().AdjustToContents();
-
-                        // Lưu file
+                        sheet.Column(7).Style.NumberFormat.Format = "#,##0";                       
+                        sheet.Columns().AdjustToContents();                       
                         wb.SaveAs(sfd.FileName);
 
                         MessageBox.Show("Đã xuất dữ liệu ra tập tin Excel thành công.", "Thành công",
@@ -217,16 +210,14 @@ namespace QuanLyTienGioBBD.Forms
                     MessageBox.Show("Lỗi khi xuất dữ liệu: " + ex.Message, "Lỗi",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 
+                  }
             }
-            }
-                }
+        }
         
         private void cboBan_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboBan.Focused) LoadLichSu();
-        }
-
-       
+        }     
     }
 }
 

@@ -50,13 +50,13 @@ namespace QuanLyTienGioBBD
             txtSoDienThoai.Enabled = allows;
             txtMatKhau.Enabled = allows;
 
-            // SỬA TẠI ĐÂY: Cho phép nhập tài khoản khi nhấn Thêm HOẶC Sửa (allows = true)
+           
             txtTenDangNhap.Enabled = allows;
 
-            // Chức vụ: Chỉ Admin/Quản lý mới được đổi
+           
             cboChucVu.Enabled = allows && (isAdmin || isManager);
 
-            // ... các code nút bấm giữ nguyên ...
+          
             btnThem.Enabled = !allows;
             btnSua.Enabled = !allows;
             btnLuu.Enabled = allows;
@@ -66,10 +66,10 @@ namespace QuanLyTienGioBBD
         private void CapNhatTrangThaiTaiKhoan(bool allows)
         {
             string cv = cboChucVu.Text;
-            // Bất kỳ chức vụ nào KHÔNG PHẢI "Nhân viên" thì đều CÓ tài khoản
+           
             bool chucVuCoTaiKhoan = (cv != "Nhân viên");
 
-            // allows = true khi nhấn Thêm hoặc Sửa
+          
             txtTenDangNhap.Enabled = allows && chucVuCoTaiKhoan;
             txtMatKhau.Enabled = allows && chucVuCoTaiKhoan;
 
@@ -82,7 +82,7 @@ namespace QuanLyTienGioBBD
             }
             else
             {
-                // Khi chọn Ca Sáng/Chiều/Tối, ô sẽ trắng ra nếu đang trong chế độ chỉnh sửa
+                
                 txtTenDangNhap.BackColor = allows ? Color.White : Color.LightGray;
                 txtMatKhau.BackColor = allows ? Color.White : Color.LightGray;
             }
@@ -97,7 +97,7 @@ namespace QuanLyTienGioBBD
         {
             try
             {
-                db = new QLBidaDbContext(); // Làm tươi kết nối
+                db = new QLBidaDbContext(); 
                 var list = db.NhanVien
                    // .Where(nv => nv.TrangThai == true)
                     .Select(nv => new {
@@ -163,9 +163,9 @@ namespace QuanLyTienGioBBD
                     bool canCoTaiKhoan = (cboChucVu.Text != "Nhân viên");
                     string tenDN = txtTenDangNhap.Text.Trim();
 
-                    if (dangThem) // CHẾ ĐỘ THÊM MỚI
+                    if (dangThem) 
                     {
-                        // Kiểm tra trùng tên đăng nhập
+                       
                         if (canCoTaiKhoan && !string.IsNullOrEmpty(tenDN))
                         {
                             if (context.NhanVien.Any(x => x.TenDangNhap == tenDN))
@@ -182,11 +182,11 @@ namespace QuanLyTienGioBBD
                             ChucVu = cboChucVu.Text,
                             TenDangNhap = canCoTaiKhoan ? (string.IsNullOrEmpty(tenDN) ? null : tenDN) : null,
                             MatKhau = canCoTaiKhoan ? (string.IsNullOrEmpty(txtMatKhau.Text) ? "123" : txtMatKhau.Text) : null,
-                            TrangThai = true // QUAN TRỌNG: Nhân viên mới mặc định là đang làm việc
+                            TrangThai = true
                         };
                         context.NhanVien.Add(nvMoi);
                     }
-                    else // CHẾ ĐỘ SỬA
+                    else 
                     {
                         var nvSua = context.NhanVien.Find(maDangChon);
                         if (nvSua != null)
@@ -198,7 +198,7 @@ namespace QuanLyTienGioBBD
                            
                             if (canCoTaiKhoan)
                             {
-                                // Kiểm tra trùng: Tìm xem có ai khác (không phải người đang sửa) trùng tên đăng nhập không
+                               
                                 if (!string.IsNullOrEmpty(tenDN) && context.NhanVien.Any(x => x.TenDangNhap == tenDN && x.MaNV != (int)maDangChon))
                                 {
                                     MessageBox.Show("Tên đăng nhập đã được người khác sử dụng!");
@@ -249,7 +249,7 @@ namespace QuanLyTienGioBBD
                     var nv = context.NhanVien.Find(maDangChon);
                     if (nv == null) return;
 
-                    // Vẫn chặn xóa Admin cho an toàn
+                   
                     if (nv.ChucVu == "Admin")
                     {
                         MessageBox.Show("Không thể xóa tài khoản Admin!");
@@ -261,7 +261,7 @@ namespace QuanLyTienGioBBD
 
                     if (result == DialogResult.Yes)
                     {
-                        // THAY THẾ LỆNH REMOVE BẰNG LỆNH DƯỚI ĐÂY:
+                       
                         nv.TrangThai = false;
 
                         context.SaveChanges();
@@ -269,7 +269,7 @@ namespace QuanLyTienGioBBD
                         MessageBox.Show("Đã xóa nhân viên thành công!");
                         maDangChon = null;
                         ClearForm();
-                        LoadData(); // Load lại sẽ mất tên nhân viên đó khỏi bảng
+                        LoadData();
                     }
                 }
             }
@@ -295,8 +295,7 @@ namespace QuanLyTienGioBBD
             txtHoVaTen.Clear();
             txtSoDienThoai.Clear();
             txtTenDangNhap.Clear();
-            txtMatKhau.Clear();
-            // Tìm và chọn đúng chữ "Nhân viên" thay vì dùng số Index
+            txtMatKhau.Clear();           
             cboChucVu.Text = "Nhân viên";
         }
 
@@ -306,14 +305,12 @@ namespace QuanLyTienGioBBD
 
             var row = dgvNhanVien.Rows[e.RowIndex];
 
-            // 2. Kiểm tra ID có tồn tại không
+          
             if (row.Cells["MaNV"].Value == null || row.Cells["MaNV"].Value == DBNull.Value) return;
 
             maDangChon = Convert.ToInt32(row.Cells["MaNV"].Value);
             txtMaNV.Text = maDangChon.ToString();
 
-            // 3. Đọc dữ liệu cực kỳ an toàn bằng toán tử ?. và ?? ""
-            // Nếu dữ liệu trong DB là Null, nó sẽ hiện ô trắng thay vì văng lỗi đỏ
             txtHoVaTen.Text = row.Cells["TenNV"].Value?.ToString() ?? "";
             txtSoDienThoai.Text = row.Cells["SoDienThoai"].Value?.ToString() ?? "";
             txtTenDangNhap.Text = row.Cells["TenDangNhap"].Value?.ToString() ?? "";
@@ -332,7 +329,7 @@ namespace QuanLyTienGioBBD
                 return;
             }
             dangThem = false;
-            BatTatChinhSua(true); // Mở khóa các textbox
+            BatTatChinhSua(true); 
             CapNhatTrangThaiTaiKhoan(true);
         }
 

@@ -66,16 +66,16 @@
             // 
             statusStrip1.ImageScalingSize = new Size(20, 20);
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblTrangThai, toolStripStatusLabel1, lblLienKet });
-            statusStrip1.Location = new Point(0, 424);
+            statusStrip1.Location = new Point(0, 500);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(800, 26);
+            statusStrip1.Size = new Size(956, 26);
             statusStrip1.TabIndex = 4;
             statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(632, 20);
+            toolStripStatusLabel1.Size = new Size(923, 20);
             toolStripStatusLabel1.Spring = true;
             // 
             // mnuBaoCaoThongKe
@@ -152,11 +152,14 @@
             // 
             // menuStrip1
             // 
+            menuStrip1.BackColor = Color.Transparent;
+            menuStrip1.BackgroundImageLayout = ImageLayout.Stretch;
             menuStrip1.ImageScalingSize = new Size(20, 20);
             menuStrip1.Items.AddRange(new ToolStripItem[] { hệThốngToolStripMenuItem, mnuQuanLy, mnuBaoCaoThongKe, mnuTroGiup });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 28);
+            menuStrip1.RenderMode = ToolStripRenderMode.System;
+            menuStrip1.Size = new Size(956, 28);
             menuStrip1.TabIndex = 3;
             menuStrip1.Text = "FormMain";
             // 
@@ -178,10 +181,11 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            BackColor = Color.FromArgb(224, 224, 224);
+            BackgroundImageLayout = ImageLayout.Zoom;
+            ClientSize = new Size(956, 526);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
-            IsMdiContainer = true;
             Name = "FormTrangChu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Trang chủ";

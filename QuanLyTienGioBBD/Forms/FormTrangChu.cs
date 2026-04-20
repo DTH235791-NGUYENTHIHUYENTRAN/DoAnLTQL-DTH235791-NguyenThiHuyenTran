@@ -23,17 +23,14 @@ namespace QuanLyTienGioBBD.Forms
 
         private void FormTrangChu_Load(object sender, EventArgs e)
         {
-            // Chuyển về viết thường để so sánh chính xác hơn
+          
             string currentRole = role?.Trim().ToLower();
 
             if (currentRole != "admin")
             {
-                mnuNhanVien.Visible = false;   // Nhân viên không thấy quản lý nhân sự
-                mnuDoanhThu.Visible = false;   // Nhân viên không thấy thống kê doanh thu
-
-                // Nếu bạn muốn nhân viên vẫn được xem danh sách khách nhưng không được sửa/xóa 
-                // thì để Visible = true nhưng xử lý bên trong FrmKhachHang
-
+                mnuNhanVien.Visible = false;   
+                mnuDoanhThu.Visible = false;  
+               
 
             }
         }
@@ -67,14 +64,14 @@ namespace QuanLyTienGioBBD.Forms
 
         private void mnuNhanVien_Click(object sender, EventArgs e)
         {
-            // 🔥 CHECK QUYỀN
+           
             if (string.IsNullOrEmpty(role) || role.Trim().ToLower() != "admin")
             {
                 MessageBox.Show("Không có quyền!");
                 return;
             }
 
-            // 🔥 TRUYỀN ROLE QUA FORM
+            
             FrmNhanVien f = new FrmNhanVien(role);
             f.ShowDialog();
         }
@@ -87,7 +84,7 @@ namespace QuanLyTienGioBBD.Forms
 
         private void mnuHoaDon_Click(object sender, EventArgs e)
         {
-            // Truyền role vào để FrmQuanLyHoaDon biết đường chặn nút "Xóa"
+            
             FrmQuanLyHoaDon f = new FrmQuanLyHoaDon(role);
             f.ShowDialog();
         }

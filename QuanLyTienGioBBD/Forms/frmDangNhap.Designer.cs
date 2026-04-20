@@ -40,39 +40,43 @@
             // lbldangnhap
             // 
             lbldangnhap.AutoSize = true;
-            lbldangnhap.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            lbldangnhap.Location = new Point(177, 32);
+            lbldangnhap.BackColor = Color.Transparent;
+            lbldangnhap.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lbldangnhap.ForeColor = SystemColors.ControlLightLight;
+            lbldangnhap.Location = new Point(160, 38);
             lbldangnhap.Name = "lbldangnhap";
-            lbldangnhap.Size = new Size(128, 23);
+            lbldangnhap.Size = new Size(152, 25);
             lbldangnhap.TabIndex = 0;
             lbldangnhap.Text = "ĐĂNG NHẬP";
             // 
             // lblTen
             // 
-            lblTen.AutoSize = true;
-            lblTen.Font = new Font("Times New Roman", 10.8F);
-            lblTen.Location = new Point(85, 76);
+            lblTen.BackColor = Color.Transparent;
+            lblTen.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lblTen.ForeColor = Color.White;
+            lblTen.Location = new Point(18, 97);
             lblTen.Name = "lblTen";
-            lblTen.Size = new Size(129, 20);
+            lblTen.Size = new Size(186, 35);
             lblTen.TabIndex = 1;
             lblTen.Text = "Tên Đăng Nhập:";
             // 
             // lblmk
             // 
-            lblmk.AutoSize = true;
-            lblmk.Font = new Font("Times New Roman", 10.8F);
-            lblmk.Location = new Point(85, 134);
+            lblmk.BackColor = Color.Transparent;
+            lblmk.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lblmk.ForeColor = Color.White;
+            lblmk.Location = new Point(18, 169);
             lblmk.Name = "lblmk";
-            lblmk.Size = new Size(82, 20);
+            lblmk.Size = new Size(140, 31);
             lblmk.TabIndex = 2;
             lblmk.Text = "Mật khẩu:";
             // 
             // btndn
             // 
-            btndn.Font = new Font("Times New Roman", 10.8F);
-            btndn.Location = new Point(85, 193);
+            btndn.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btndn.Location = new Point(85, 228);
             btndn.Name = "btndn";
-            btndn.Size = new Size(119, 29);
+            btndn.Size = new Size(119, 37);
             btndn.TabIndex = 3;
             btndn.Text = "Đăng nhập";
             btndn.UseVisualStyleBackColor = true;
@@ -80,10 +84,10 @@
             // 
             // btnHuybo
             // 
-            btnHuybo.Font = new Font("Times New Roman", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
-            btnHuybo.Location = new Point(228, 193);
+            btnHuybo.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnHuybo.Location = new Point(228, 228);
             btnHuybo.Name = "btnHuybo";
-            btnHuybo.Size = new Size(125, 29);
+            btnHuybo.Size = new Size(125, 37);
             btnHuybo.TabIndex = 4;
             btnHuybo.Text = "Hủy bỏ";
             btnHuybo.UseVisualStyleBackColor = true;
@@ -91,17 +95,19 @@
             // 
             // txtTenDangNhap
             // 
-            txtTenDangNhap.Location = new Point(228, 76);
+            txtTenDangNhap.Location = new Point(228, 96);
+            txtTenDangNhap.Multiline = true;
             txtTenDangNhap.Name = "txtTenDangNhap";
-            txtTenDangNhap.Size = new Size(161, 27);
+            txtTenDangNhap.Size = new Size(192, 36);
             txtTenDangNhap.TabIndex = 5;
             // 
             // txtMatKhau
             // 
-            txtMatKhau.Location = new Point(228, 134);
+            txtMatKhau.Location = new Point(228, 160);
+            txtMatKhau.Multiline = true;
             txtMatKhau.Name = "txtMatKhau";
             txtMatKhau.PasswordChar = '*';
-            txtMatKhau.Size = new Size(161, 27);
+            txtMatKhau.Size = new Size(192, 40);
             txtMatKhau.TabIndex = 6;
             txtMatKhau.KeyDown += txtMatKhau_KeyDown;
             // 
@@ -109,7 +115,9 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(456, 272);
+            BackgroundImage = Properties.Resources.frmdn;
+            BackgroundImageLayout = ImageLayout.Zoom;
+            ClientSize = new Size(482, 318);
             Controls.Add(txtMatKhau);
             Controls.Add(txtTenDangNhap);
             Controls.Add(btnHuybo);
@@ -118,7 +126,6 @@
             Controls.Add(lblTen);
             Controls.Add(lbldangnhap);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmDangNhap";
             StartPosition = FormStartPosition.CenterScreen;

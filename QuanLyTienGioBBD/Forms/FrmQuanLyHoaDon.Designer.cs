@@ -52,22 +52,26 @@
             // 
             // btnTimKiem
             // 
+            btnTimKiem.BackColor = SystemColors.ActiveBorder;
+            btnTimKiem.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btnTimKiem.Location = new Point(279, 9);
             btnTimKiem.Name = "btnTimKiem";
             btnTimKiem.Size = new Size(132, 39);
             btnTimKiem.TabIndex = 2;
             btnTimKiem.Text = "Tìm Kiếm";
-            btnTimKiem.UseVisualStyleBackColor = true;
+            btnTimKiem.UseVisualStyleBackColor = false;
             btnTimKiem.Click += btnTimKiem_Click;
             // 
             // btnLamMoi
             // 
-            btnLamMoi.Location = new Point(454, 8);
+            btnLamMoi.BackColor = SystemColors.AppWorkspace;
+            btnLamMoi.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnLamMoi.Location = new Point(493, 7);
             btnLamMoi.Name = "btnLamMoi";
             btnLamMoi.Size = new Size(103, 39);
             btnLamMoi.TabIndex = 3;
             btnLamMoi.Text = "Làm Mới";
-            btnLamMoi.UseVisualStyleBackColor = true;
+            btnLamMoi.UseVisualStyleBackColor = false;
             btnLamMoi.Click += btnLamMoi_Click;
             // 
             // dgvLichSu
@@ -77,17 +81,19 @@
             dgvLichSu.Location = new Point(12, 123);
             dgvLichSu.Name = "dgvLichSu";
             dgvLichSu.RowHeadersWidth = 51;
-            dgvLichSu.Size = new Size(1094, 434);
+            dgvLichSu.Size = new Size(1119, 434);
             dgvLichSu.TabIndex = 6;
             // 
             // btnThoat
             // 
-            btnThoat.Location = new Point(756, 8);
+            btnThoat.BackColor = SystemColors.AppWorkspace;
+            btnThoat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnThoat.Location = new Point(876, 7);
             btnThoat.Name = "btnThoat";
-            btnThoat.Size = new Size(96, 34);
+            btnThoat.Size = new Size(96, 39);
             btnThoat.TabIndex = 7;
             btnThoat.Text = "Thoát";
-            btnThoat.UseVisualStyleBackColor = true;
+            btnThoat.UseVisualStyleBackColor = false;
             btnThoat.Click += btnThoat_Click;
             // 
             // dtpTuNgay
@@ -110,7 +116,7 @@
             // 
             lblTongDoanhThu.AutoSize = true;
             lblTongDoanhThu.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            lblTongDoanhThu.Location = new Point(770, 65);
+            lblTongDoanhThu.Location = new Point(788, 65);
             lblTongDoanhThu.Name = "lblTongDoanhThu";
             lblTongDoanhThu.Size = new Size(184, 25);
             lblTongDoanhThu.TabIndex = 10;
@@ -118,18 +124,20 @@
             // 
             // btnXuat
             // 
-            btnXuat.Location = new Point(601, 10);
+            btnXuat.BackColor = SystemColors.AppWorkspace;
+            btnXuat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btnXuat.Location = new Point(680, 7);
             btnXuat.Name = "btnXuat";
-            btnXuat.Size = new Size(117, 37);
+            btnXuat.Size = new Size(117, 39);
             btnXuat.TabIndex = 12;
             btnXuat.Text = "Xuất Excel";
-            btnXuat.UseVisualStyleBackColor = true;
+            btnXuat.UseVisualStyleBackColor = false;
             btnXuat.Click += btnXuat_Click;
             // 
             // cboBan
             // 
             cboBan.FormattingEnabled = true;
-            cboBan.Location = new Point(582, 66);
+            cboBan.Location = new Point(601, 66);
             cboBan.Name = "cboBan";
             cboBan.Size = new Size(151, 28);
             cboBan.TabIndex = 13;
@@ -138,9 +146,10 @@
             // lblBan
             // 
             lblBan.AutoSize = true;
+            lblBan.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             lblBan.Location = new Point(493, 71);
             lblBan.Name = "lblBan";
-            lblBan.Size = new Size(64, 20);
+            lblBan.Size = new Size(87, 23);
             lblBan.TabIndex = 14;
             lblBan.Text = "Lọc Bàn:";
             // 
@@ -148,7 +157,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1118, 569);
+            ClientSize = new Size(1153, 569);
             Controls.Add(lblBan);
             Controls.Add(cboBan);
             Controls.Add(btnXuat);

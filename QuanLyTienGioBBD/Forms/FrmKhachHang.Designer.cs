@@ -57,13 +57,14 @@
             // 
             // btntk
             // 
+            btntk.BackColor = Color.DarkSalmon;
             btntk.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btntk.Location = new Point(12, 208);
+            btntk.Location = new Point(12, 195);
             btntk.Name = "btntk";
-            btntk.Size = new Size(127, 29);
+            btntk.Size = new Size(127, 42);
             btntk.TabIndex = 49;
             btntk.Text = "Tìm Kiếm";
-            btntk.UseVisualStyleBackColor = true;
+            btntk.UseVisualStyleBackColor = false;
             btntk.Click += btntk_Click;
             // 
             // dgvKhachHang
@@ -76,52 +77,56 @@
             dgvKhachHang.MultiSelect = false;
             dgvKhachHang.Name = "dgvKhachHang";
             dgvKhachHang.RowHeadersWidth = 51;
-            dgvKhachHang.Size = new Size(804, 232);
+            dgvKhachHang.Size = new Size(804, 279);
             dgvKhachHang.TabIndex = 48;
             dgvKhachHang.CellClick += dgvKhachHang_CellClick;
             // 
             // btnXoa
             // 
+            btnXoa.BackColor = Color.DarkSalmon;
             btnXoa.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnXoa.Location = new Point(673, 251);
+            btnXoa.Location = new Point(734, 247);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(94, 29);
+            btnXoa.Size = new Size(94, 38);
             btnXoa.TabIndex = 45;
             btnXoa.Text = "Xóa";
-            btnXoa.UseVisualStyleBackColor = true;
+            btnXoa.UseVisualStyleBackColor = false;
             btnXoa.Click += btnXoa_Click;
             // 
             // btnHuybo
             // 
+            btnHuybo.BackColor = Color.DarkSalmon;
             btnHuybo.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnHuybo.Location = new Point(397, 252);
+            btnHuybo.Location = new Point(429, 248);
             btnHuybo.Name = "btnHuybo";
-            btnHuybo.Size = new Size(94, 29);
+            btnHuybo.Size = new Size(109, 38);
             btnHuybo.TabIndex = 43;
             btnHuybo.Text = "Hủy bỏ";
-            btnHuybo.UseVisualStyleBackColor = true;
+            btnHuybo.UseVisualStyleBackColor = false;
             btnHuybo.Click += btnHuybo_Click;
             // 
             // btnLuu
             // 
+            btnLuu.BackColor = Color.DarkSalmon;
             btnLuu.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnLuu.Location = new Point(263, 252);
+            btnLuu.Location = new Point(297, 245);
             btnLuu.Name = "btnLuu";
-            btnLuu.Size = new Size(94, 29);
+            btnLuu.Size = new Size(94, 39);
             btnLuu.TabIndex = 41;
             btnLuu.Text = "Lưu";
-            btnLuu.UseVisualStyleBackColor = true;
+            btnLuu.UseVisualStyleBackColor = false;
             btnLuu.Click += btnLuu_Click;
             // 
             // btnThem
             // 
+            btnThem.BackColor = Color.DarkSalmon;
             btnThem.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnThem.Location = new Point(24, 252);
+            btnThem.Location = new Point(24, 247);
             btnThem.Name = "btnThem";
-            btnThem.Size = new Size(94, 29);
+            btnThem.Size = new Size(94, 38);
             btnThem.TabIndex = 40;
             btnThem.Text = "Thêm";
-            btnThem.UseVisualStyleBackColor = true;
+            btnThem.UseVisualStyleBackColor = false;
             btnThem.Click += btnThem_Click;
             // 
             // txtDienThoai
@@ -162,13 +167,14 @@
             // 
             // btnSua
             // 
+            btnSua.BackColor = Color.DarkSalmon;
             btnSua.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnSua.Location = new Point(136, 252);
+            btnSua.Location = new Point(164, 245);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(94, 29);
+            btnSua.Size = new Size(99, 39);
             btnSua.TabIndex = 42;
             btnSua.Text = "Sửa";
-            btnSua.UseVisualStyleBackColor = true;
+            btnSua.UseVisualStyleBackColor = false;
             btnSua.Click += btnSua_Click;
             // 
             // lblKhach
@@ -192,6 +198,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.BackColor = Color.SeaShell;
             groupBox1.Controls.Add(txtUuDai);
             groupBox1.Controls.Add(txtDiem);
             groupBox1.Controls.Add(lblKhach);
@@ -207,7 +214,7 @@
             groupBox1.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
             groupBox1.Location = new Point(12, 22);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(662, 167);
+            groupBox1.Size = new Size(816, 167);
             groupBox1.TabIndex = 52;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin khách hàng";
@@ -216,14 +223,14 @@
             // 
             txtUuDai.Location = new Point(510, 126);
             txtUuDai.Name = "txtUuDai";
-            txtUuDai.Size = new Size(125, 28);
+            txtUuDai.Size = new Size(245, 28);
             txtUuDai.TabIndex = 52;
             // 
             // txtDiem
             // 
             txtDiem.Location = new Point(513, 71);
             txtDiem.Name = "txtDiem";
-            txtDiem.Size = new Size(125, 28);
+            txtDiem.Size = new Size(242, 28);
             txtDiem.TabIndex = 44;
             txtDiem.KeyPress += txtDiem_KeyPress;
             // 
@@ -231,7 +238,7 @@
             // 
             txtMaKH.Location = new Point(513, 22);
             txtMaKH.Name = "txtMaKH";
-            txtMaKH.Size = new Size(125, 28);
+            txtMaKH.Size = new Size(242, 28);
             txtMaKH.TabIndex = 43;
             // 
             // lblUuDai
@@ -263,21 +270,23 @@
             // 
             // txtTimKiem
             // 
-            txtTimKiem.Location = new Point(155, 210);
+            txtTimKiem.Location = new Point(155, 211);
+            txtTimKiem.Multiline = true;
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(213, 27);
+            txtTimKiem.Size = new Size(236, 26);
             txtTimKiem.TabIndex = 53;
             txtTimKiem.TextChanged += txtTimKiem_TextChanged;
             // 
             // btnXuat
             // 
+            btnXuat.BackColor = Color.DarkSalmon;
             btnXuat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btnXuat.Location = new Point(534, 252);
+            btnXuat.Location = new Point(582, 248);
             btnXuat.Name = "btnXuat";
-            btnXuat.Size = new Size(94, 29);
+            btnXuat.Size = new Size(101, 36);
             btnXuat.TabIndex = 54;
             btnXuat.Text = "Xuất";
-            btnXuat.UseVisualStyleBackColor = true;
+            btnXuat.UseVisualStyleBackColor = false;
             btnXuat.Click += btnXuat_Click;
             // 
             // button1
@@ -293,7 +302,8 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(840, 541);
+            BackColor = SystemColors.InactiveBorder;
+            ClientSize = new Size(840, 588);
             Controls.Add(button1);
             Controls.Add(btnXuat);
             Controls.Add(txtTimKiem);

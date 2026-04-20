@@ -40,8 +40,7 @@ namespace QuanLyTienGioBBD.Forms
             dgvThongKe.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvThongKe.RowHeadersVisible = false;
         }
-
-        // --- HÀM LỌC NGÀY NHANH ---
+       
         private void SetDateRange(DateTime start, DateTime end)
         {
             dtpTuNgay.Value = start;
@@ -72,7 +71,7 @@ namespace QuanLyTienGioBBD.Forms
             {
                 using (var db = new QLBidaDbContext())
                 {
-                    // 1. Lấy dữ liệu từ Database
+                   
                     var dsRaw = db.HoaDon
                         .Include(h => h.BanBida)
                         .Where(h => h.GioBatDau >= tuNgay && h.GioBatDau <= denNgay)
@@ -80,19 +79,19 @@ namespace QuanLyTienGioBBD.Forms
 
                     if (!dsRaw.Any()) { ClearData(); return; }
 
-                    // 2. Tính toán Dashboard
+                  
                     var dsDaThanhToan = dsRaw.Where(h => (h.TongTien ?? 0) > 0).ToList();
 
                     lblTongDoanhThu.Text = string.Format("{0:N0} VNĐ", dsDaThanhToan.Sum(h => h.TongTien ?? 0));
                     lblSoHoaDon.Text = dsDaThanhToan.Count.ToString();
 
-                    // Tính tổng giờ chơi quy đổi sang định dạng "Xh Ym"
+                    
                     double tongPhutTongCong = dsRaw.Sum(h => ((h.GioKetThuc ?? DateTime.Now) - h.GioBatDau).TotalMinutes);
                     int hTotal = (int)tongPhutTongCong / 60;
                     int mTotal = (int)tongPhutTongCong % 60;
                     lblTongGioChoi.Text = string.Format("{0}h {1}m", hTotal, mTotal);
 
-                    // 3. Hiển thị lên lưới DataGridView
+                   
                     dgvThongKe.DataSource = dsRaw.Select(h =>
                     {
                         TimeSpan ts = (h.GioKetThuc ?? DateTime.Now) - h.GioBatDau;
@@ -151,7 +150,7 @@ namespace QuanLyTienGioBBD.Forms
             {
                 using (var workbook = new ClosedXML.Excel.XLWorkbook())
                 {
-                    // Chuyển DataGridView thành DataTable để xuất
+                    
                     DataTable dt = new DataTable();
                     foreach (DataGridViewColumn col in dgvThongKe.Columns) dt.Columns.Add(col.HeaderText);
                     foreach (DataGridViewRow row in dgvThongKe.Rows)

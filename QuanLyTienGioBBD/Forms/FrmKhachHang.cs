@@ -36,12 +36,12 @@ namespace QuanLyTienGioBBD.Forms
             LoadLoaiKhach();
             LoadData();
 
-            // Mặc định ban đầu: Khóa hết các ô nhập và nút Lưu
+           
             BatTatChinhSua(false);
 
-            // Cấu hình các ô đặc biệt
+            
             txtMaKH.ReadOnly = true;
-            txtUuDai.ReadOnly = true; // Ưu đãi luôn luôn chỉ để xem
+            txtUuDai.ReadOnly = true; 
             txtUuDai.BackColor = Color.LightGray;
 
             // Phân quyền Admin
@@ -63,7 +63,7 @@ namespace QuanLyTienGioBBD.Forms
             txtDiem.Enabled = allows && isAdmin;
             cboLoaiKH.Enabled = allows && isAdmin;
 
-            // Điều khiển các nút bấm theo trạng thái (State-Machine)
+            
             btnThem.Enabled = !allows;
             btnSua.Enabled = !allows;
             btnXoa.Enabled = !allows && isAdmin;
@@ -85,7 +85,7 @@ namespace QuanLyTienGioBBD.Forms
 
         void CapNhatUuDaiTuDong()
         {
-            // Tự động nhảy số Ưu đãi dựa trên Text của ComboBox Loại khách
+           
             string hangKhach = cboLoaiKH.Text;
 
             if (hangKhach.Contains("VIP"))
@@ -98,7 +98,7 @@ namespace QuanLyTienGioBBD.Forms
 
         void LoadData()
         {
-            db = new QLBidaDbContext(); // Refresh data
+            db = new QLBidaDbContext(); 
             dgvKhachHang.DataSource = db.KhachHang.Select(kh => new
             {
                 kh.ID,
@@ -173,7 +173,7 @@ namespace QuanLyTienGioBBD.Forms
         {
             if (idDangChon == null) return;
 
-            string password = Microsoft.VisualBasic.Interaction.InputBox("Nhập mật khẩu Admin (123) để xóa:", "Xác thực", "");
+            string password = Microsoft.VisualBasic.Interaction.InputBox("Nhập mật khẩu Admin để xóa:", "Xác thực", "");
             if (password == "123")
             {
                 if (MessageBox.Show("Bạn có chắc chắn muốn xóa?", "Cảnh báo", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -195,7 +195,7 @@ namespace QuanLyTienGioBBD.Forms
 
         private void btntk_Click(object sender, EventArgs e)
         {
-            // Tìm kiếm thông minh: Gõ đến đâu tìm đến đó
+            
             string keyword = txtTimKiem.Text.Trim().ToLower();
             if (string.IsNullOrEmpty(keyword))
             {
@@ -239,7 +239,7 @@ namespace QuanLyTienGioBBD.Forms
 
                 if (dangThem)
                 {
-                    // Tự tìm loại "Khách thường" để gán mặc định
+                   
                     var loaiThuong = db.LoaiKhach.FirstOrDefault(l => l.TenLoai.Contains("Thường") || l.TenLoai.Contains("Thành viên"));
 
                     var khMoi = new KhachHang
@@ -341,24 +341,24 @@ namespace QuanLyTienGioBBD.Forms
                     try
                     {
                         DataTable table = new DataTable();
-                        // Thiết lập các cột dựa đúng theo Model của bạn
+                       
                         table.Columns.Add("Mã KH", typeof(int));
                         table.Columns.Add("Tên Khách Hàng", typeof(string));
                         table.Columns.Add("Số Điện Thoại", typeof(string));
                         table.Columns.Add("Điểm Tích Lũy", typeof(int));
                         table.Columns.Add("Loại Khách", typeof(string));
 
-                    // Truy vấn lấy dữ liệu kèm theo bảng LoaiKhach để lấy TenLoai
+                    
                     var danhSachKhachHang = db.KhachHang.Include(x => x.LoaiKhach).ToList();
 
                     foreach (var k in danhSachKhachHang)
                         {
                             table.Rows.Add(
                                 k.ID,
-                                k.TenKH,      // Đã khớp với TenKH trong Model
-                                k.DienThoai,  // Đã khớp với DienThoai
-                                k.Diem,       // Điểm kiểu int, không cần ?? 0 nữa
-                                k.LoaiKhach?.TenLoai ?? "Chưa xác định" // Lấy tên loại (VIP/Thường)
+                                k.TenKH,     
+                                k.DienThoai,  
+                                k.Diem,       
+                                k.LoaiKhach?.TenLoai ?? "Chưa xác định" 
                             );
                         }
 
@@ -366,7 +366,7 @@ namespace QuanLyTienGioBBD.Forms
                         {
                             var sheet = wb.Worksheets.Add(table, "Khách Hàng");
 
-                            // Trang trí tiêu đề cho chuyên nghiệp
+                           
                             var header = sheet.Row(1);
                             header.Style.Font.Bold = true;
                             header.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.AliceBlue;
